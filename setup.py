@@ -34,7 +34,7 @@ def main():
         author='neptune.ai',
         support='contact@neptune.ai',
         author_email='contact@neptune.ai',
-        url="https://github.com/neptune-ai/neptune-client",
+        url="https://github.com/neptune-ai/neptune-sklearn",
         long_description=readme,
         long_description_content_type="text/markdown",
         license='MIT License',
