@@ -13,21 +13,49 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+__all__ = [
+    'create_class_prediction_error_chart',
+    'create_classification_report_chart',
+    'create_classifier_summary',
+    'create_confusion_matrix_chart',
+    'create_cooks_distance_chart',
+    'create_feature_importance_chart',
+    'create_kelbow_chart',
+    'create_kmeans_summary',
+    'create_learning_curve_chart',
+    'create_precision_recall_chart',
+    'create_prediction_error_chart',
+    'create_regressor_summary',
+    'create_residuals_chart',
+    'create_roc_auc_chart',
+    'create_silhouette_chart',
+    'get_cluster_labels',
+    'get_estimator_params',
+    'get_pickled_model',
+    'get_scores',
+    'get_test_preds',
+    'get_test_preds_proba',
+]
 
 import matplotlib.pyplot as plt
 import pandas as pd
 from scikitplot.estimators import plot_learning_curve
 from scikitplot.metrics import plot_precision_recall
-from sklearn.base import is_regressor, is_classifier
+from sklearn.base import is_classifier, is_regressor
 from sklearn.cluster import KMeans
-from sklearn.metrics import explained_variance_score, max_error, mean_absolute_error, r2_score, \
-    precision_recall_fscore_support
-from yellowbrick.classifier import ClassificationReport, ConfusionMatrix, ROCAUC, ClassPredictionError
-from yellowbrick.cluster import SilhouetteVisualizer, KElbowVisualizer
+from sklearn.metrics import explained_variance_score, max_error, mean_absolute_error, precision_recall_fscore_support, \
+    r2_score
+from yellowbrick.classifier import ClassPredictionError, ClassificationReport, ConfusionMatrix, ROCAUC
+from yellowbrick.cluster import KElbowVisualizer, SilhouetteVisualizer
 from yellowbrick.model_selection import FeatureImportances
-from yellowbrick.regressor import ResidualsPlot, PredictionError, CooksDistance
+from yellowbrick.regressor import CooksDistance, PredictionError, ResidualsPlot
 
-import neptune.new as neptune
+try:
+    # neptune-client=0.9.0 package structure
+    import neptune.new as neptune
+except ImportError:
+    # neptune-client=1.0.0 package structure
+    import neptune
 
 
 def create_regressor_summary(regressor, X_train, X_test, y_train, y_test, nrows=1000, log_charts=True):
@@ -275,7 +303,7 @@ def get_estimator_params(estimator):
             run = neptune.init(project='my_workspace/my_project')
             run['estimator/params'] = npt_utils.get_estimator_params(rfr)
     """
-    assert is_regressor(estimator) or is_classifier(estimator) or isinstance(estimator, KMeans),\
+    assert is_regressor(estimator) or is_classifier(estimator) or isinstance(estimator, KMeans), \
         'Estimator should be sklearn regressor, classifier or kmeans clusterer.'
 
     return estimator.get_params()
@@ -306,7 +334,7 @@ def get_pickled_model(estimator):
             run = neptune.init(project='my_workspace/my_project')
             run['estimator/pickled_model'] = npt_utils.get_pickled_model(rfr)
     """
-    assert is_regressor(estimator) or is_classifier(estimator),\
+    assert is_regressor(estimator) or is_classifier(estimator), \
         'Estimator should be sklearn regressor or classifier.'
 
     return neptune.types.File.as_pickle(estimator)
@@ -349,7 +377,7 @@ def get_test_preds(estimator, X_test, y_test, y_pred=None, nrows=1000):
             run = neptune.init(project='my_workspace/my_project')
             run['estimator/pickled_model'] = npt_utils.compute_test_preds(rfr, X_test, y_test)
     """
-    assert is_regressor(estimator) or is_classifier(estimator),\
+    assert is_regressor(estimator) or is_classifier(estimator), \
         'Estimator should be sklearn regressor or classifier.'
     assert isinstance(nrows, int), 'nrows should be integer, {} was passed'.format(type(nrows))
 
@@ -492,7 +520,7 @@ def get_scores(estimator, X, y, y_pred=None):
             run = neptune.init(project='my_workspace/my_project')
             run['estimator/scores'] = npt_utils.get_scores(rfc, X, y)
     """
-    assert is_regressor(estimator) or is_classifier(estimator),\
+    assert is_regressor(estimator) or is_classifier(estimator), \
         'Estimator should be sklearn regressor or classifier.'
 
     scores_dict = {}
@@ -1176,7 +1204,7 @@ def create_silhouette_chart(model, X, **kwargs):
 
     n_clusters = model.get_params()['n_clusters']
 
-    for j in range(2, n_clusters+1):
+    for j in range(2, n_clusters + 1):
         model.set_params(**{'n_clusters': j})
         model.fit(X)
 
