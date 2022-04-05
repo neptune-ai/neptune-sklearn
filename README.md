@@ -1,6 +1,6 @@
-# Neptune + Scikit-Learn Integration
+# Neptune + Scikit-learn Integration
 
-Experiment tracking, model registry, data versioning, and live model monitoring for Scikit-Learn (Sklearn) trained models.
+Experiment tracking, model registry, data versioning, and live model monitoring for Scikit-learn (Sklearn) trained models.
 
 ## What will you get with this integration? 
 
