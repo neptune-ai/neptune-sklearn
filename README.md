@@ -31,34 +31,39 @@ Experiment tracking, model registry, data versioning, and live model monitoring 
 * [Runs logged in the Neptune app](https://app.neptune.ai/o/common/org/sklearn-integration/e/SKLEAR-95/all)
 * [Run example in Google Colab](https://colab.research.google.com/github/neptune-ai/examples/blob/master/integrations-and-supported-tools/sklearn/notebooks/Neptune_Scikit_learn.ipynb)
 
-## Minimal example
+## Example
 
 ```python
-from sklearn.datasets import load_boston
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.model_selection import train_test_split
+# On the command line:
+pip install scikit-learn neptune-client neptune-sklearn
+```
+```python
+# In Python, prepare a fitted estimator
+parameters = {"n_estimators": 70,
+              "max_depth": 7,
+              "min_samples_split": 3}
+
+estimator = ...
+estimator.fit(X_train, y_train)
+
+# Import Neptune and start a run
 import neptune.new as neptune
-import neptune.new.integrations.sklearn as npt_utils
-
-run = neptune.init(project='common/sklearn-integration',
-                   api_token='ANONYMOUS',
-                   name='regression-example',
-                   tags=['RandomForestRegressor', 'regression'])
-
-parameters = {'n_estimators': 70,
-              'max_depth': 7,
-              'min_samples_split': 3}
+run = neptune.init(project="common/sklearn-integration",
+                   api_token="ANONYMOUS")
 
 
-rfr = RandomForestRegressor(**parameters)
+# Log parameters and scores
+run["parameters"] = parameters
 
-X, y = load_boston(return_X_y=True)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=28743)
+y_pred = estimator.predict(X_test)
 
-rfr.fit(X_train, y_train)
+run["scores/max_error"] = max_error(y_test, y_pred)
+run["scores/mean_absolute_error"] = mean_absolute_error(y_test, y_pred)
+run["scores/r2_score"] = r2_score(y_test, y_pred)
 
-run['rfr_summary'] = npt_utils.create_regressor_summary(rfr, X_train, X_test, y_train, y_test)
 
+# Stop the run
+run.stop()
 ```
 
 ## Support
