@@ -1,3 +1,4 @@
 ## neptune-sklearn 0.1.2
 
-* `get_estimator_params` works no with any scikit-learn estimator.
+### Changes
+* `get_estimator_params` works no with any scikit-learn estimator. ([#3](https://github.com/neptune-ai/neptune-sklearn/pull/3))
