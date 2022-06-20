@@ -41,7 +41,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from scikitplot.estimators import plot_learning_curve
 from scikitplot.metrics import plot_precision_recall
-from sklearn.base import is_classifier, is_regressor
+from sklearn.base import is_classifier, is_regressor, BaseEstimator
 from sklearn.cluster import KMeans
 from sklearn.metrics import explained_variance_score, max_error, mean_absolute_error, precision_recall_fscore_support, \
     r2_score
@@ -303,8 +303,7 @@ def get_estimator_params(estimator):
             run = neptune.init(project='my_workspace/my_project')
             run['estimator/params'] = npt_utils.get_estimator_params(rfr)
     """
-    assert is_regressor(estimator) or is_classifier(estimator) or isinstance(estimator, KMeans), \
-        'Estimator should be sklearn regressor, classifier or kmeans clusterer.'
+    assert isinstance(estimator, BaseEstimator), 'Estimator should be a sklearn estimator.'
 
     return estimator.get_params()
 
