@@ -14,38 +14,43 @@
 # limitations under the License.
 #
 __all__ = [
-    'create_class_prediction_error_chart',
-    'create_classification_report_chart',
-    'create_classifier_summary',
-    'create_confusion_matrix_chart',
-    'create_cooks_distance_chart',
-    'create_feature_importance_chart',
-    'create_kelbow_chart',
-    'create_kmeans_summary',
-    'create_learning_curve_chart',
-    'create_precision_recall_chart',
-    'create_prediction_error_chart',
-    'create_regressor_summary',
-    'create_residuals_chart',
-    'create_roc_auc_chart',
-    'create_silhouette_chart',
-    'get_cluster_labels',
-    'get_estimator_params',
-    'get_pickled_model',
-    'get_scores',
-    'get_test_preds',
-    'get_test_preds_proba',
+    "create_class_prediction_error_chart",
+    "create_classification_report_chart",
+    "create_classifier_summary",
+    "create_confusion_matrix_chart",
+    "create_cooks_distance_chart",
+    "create_feature_importance_chart",
+    "create_kelbow_chart",
+    "create_kmeans_summary",
+    "create_learning_curve_chart",
+    "create_precision_recall_chart",
+    "create_prediction_error_chart",
+    "create_regressor_summary",
+    "create_residuals_chart",
+    "create_roc_auc_chart",
+    "create_silhouette_chart",
+    "get_cluster_labels",
+    "get_estimator_params",
+    "get_pickled_model",
+    "get_scores",
+    "get_test_preds",
+    "get_test_preds_proba",
 ]
 
 import matplotlib.pyplot as plt
 import pandas as pd
 from scikitplot.estimators import plot_learning_curve
 from scikitplot.metrics import plot_precision_recall
-from sklearn.base import is_classifier, is_regressor, BaseEstimator
+from sklearn.base import BaseEstimator, is_classifier, is_regressor
 from sklearn.cluster import KMeans
-from sklearn.metrics import explained_variance_score, max_error, mean_absolute_error, precision_recall_fscore_support, \
-    r2_score
-from yellowbrick.classifier import ClassPredictionError, ClassificationReport, ConfusionMatrix, ROCAUC
+from sklearn.metrics import (
+    explained_variance_score,
+    max_error,
+    mean_absolute_error,
+    precision_recall_fscore_support,
+    r2_score,
+)
+from yellowbrick.classifier import ROCAUC, ClassificationReport, ClassPredictionError, ConfusionMatrix
 from yellowbrick.cluster import KElbowVisualizer, SilhouetteVisualizer
 from yellowbrick.model_selection import FeatureImportances
 from yellowbrick.regressor import CooksDistance, PredictionError, ResidualsPlot
@@ -117,25 +122,28 @@ def create_regressor_summary(regressor, X_train, X_test, y_train, y_test, nrows=
             run = neptune.init(project='my_workspace/my_project')
             run['random_forest/summary'] = npt_utils.create_regressor_summary(rfr, X_train, X_test, y_train, y_test)
     """
-    assert is_regressor(regressor), 'regressor should be sklearn regressor.'
+    assert is_regressor(regressor), "regressor should be sklearn regressor."
 
     reg_summary = dict()
 
-    reg_summary['all_params'] = get_estimator_params(regressor)
-    reg_summary['pickled_model'] = get_pickled_model(regressor)
+    reg_summary["all_params"] = get_estimator_params(regressor)
+    reg_summary["pickled_model"] = get_pickled_model(regressor)
 
     y_pred = regressor.predict(X_test)
 
-    reg_summary['test'] = {'preds': get_test_preds(regressor, X_test, y_test, y_pred=y_pred, nrows=nrows),
-                           'scores': get_scores(regressor, X_test, y_test, y_pred=y_pred)}
+    reg_summary["test"] = {
+        "preds": get_test_preds(regressor, X_test, y_test, y_pred=y_pred, nrows=nrows),
+        "scores": get_scores(regressor, X_test, y_test, y_pred=y_pred),
+    }
 
     if log_charts:
-        reg_summary['diagnostics_charts'] = {
-            'learning_curve': create_learning_curve_chart(regressor, X_train, y_train),
-            'feature_importance': create_feature_importance_chart(regressor, X_train, y_train),
-            'residuals': create_residuals_chart(regressor, X_train, X_test, y_train, y_test),
-            'prediction_error': create_prediction_error_chart(regressor, X_train, X_test, y_train, y_test),
-            'cooks_distance': create_cooks_distance_chart(regressor, X_train, y_train)}
+        reg_summary["diagnostics_charts"] = {
+            "learning_curve": create_learning_curve_chart(regressor, X_train, y_train),
+            "feature_importance": create_feature_importance_chart(regressor, X_train, y_train),
+            "residuals": create_residuals_chart(regressor, X_train, X_test, y_train, y_test),
+            "prediction_error": create_prediction_error_chart(regressor, X_train, X_test, y_train, y_test),
+            "cooks_distance": create_cooks_distance_chart(regressor, X_train, y_train),
+        }
 
     return reg_summary
 
@@ -200,26 +208,29 @@ def create_classifier_summary(classifier, X_train, X_test, y_train, y_test, nrow
             run = neptune.init(project='my_workspace/my_project')
             run['random_forest/summary'] = npt_utils.create_classifier_summary(rfc, X_train, X_test, y_train, y_test)
     """
-    assert is_classifier(classifier), 'classifier should be sklearn classifier.'
+    assert is_classifier(classifier), "classifier should be sklearn classifier."
 
     cls_summary = dict()
 
-    cls_summary['all_params'] = get_estimator_params(classifier)
-    cls_summary['pickled_model'] = get_pickled_model(classifier)
+    cls_summary["all_params"] = get_estimator_params(classifier)
+    cls_summary["pickled_model"] = get_pickled_model(classifier)
 
     y_pred = classifier.predict(X_test)
 
-    cls_summary['test'] = {'preds': get_test_preds(classifier, X_test, y_test, y_pred=y_pred, nrows=nrows),
-                           'preds_proba': get_test_preds_proba(classifier, X_test, nrows=nrows),
-                           'scores': get_scores(classifier, X_test, y_test, y_pred=y_pred)}
+    cls_summary["test"] = {
+        "preds": get_test_preds(classifier, X_test, y_test, y_pred=y_pred, nrows=nrows),
+        "preds_proba": get_test_preds_proba(classifier, X_test, nrows=nrows),
+        "scores": get_scores(classifier, X_test, y_test, y_pred=y_pred),
+    }
 
     if log_charts:
-        cls_summary['diagnostics_charts'] = {
-            'classification_report': create_classification_report_chart(classifier, X_train, X_test, y_train, y_test),
-            'confusion_matrix': create_confusion_matrix_chart(classifier, X_train, X_test, y_train, y_test),
-            'ROC_AUC': create_roc_auc_chart(classifier, X_train, X_test, y_train, y_test),
-            'precision_recall': create_precision_recall_chart(classifier, X_test, y_test),
-            'class_prediction_error': create_class_prediction_error_chart(classifier, X_train, X_test, y_train, y_test)}
+        cls_summary["diagnostics_charts"] = {
+            "classification_report": create_classification_report_chart(classifier, X_train, X_test, y_train, y_test),
+            "confusion_matrix": create_confusion_matrix_chart(classifier, X_train, X_test, y_train, y_test),
+            "ROC_AUC": create_roc_auc_chart(classifier, X_train, X_test, y_train, y_test),
+            "precision_recall": create_precision_recall_chart(classifier, X_test, y_test),
+            "class_prediction_error": create_class_prediction_error_chart(classifier, X_train, X_test, y_train, y_test),
+        }
 
     return cls_summary
 
@@ -264,16 +275,17 @@ def create_kmeans_summary(model, X, nrows=1000, **kwargs):
             run = neptune.init(project='my_workspace/my_project')
             run['kmeans/summary'] = npt_utils.create_kmeans_summary(km, X)
     """
-    assert isinstance(model, KMeans), 'model should be sklearn KMeans instance'
+    assert isinstance(model, KMeans), "model should be sklearn KMeans instance"
 
     kmeans_summary = dict()
     model.set_params(**kwargs)
 
-    kmeans_summary['all_params'] = get_estimator_params(model)
-    kmeans_summary['cluster_labels'] = get_cluster_labels(model, X, nrows=nrows, **kwargs)
-    kmeans_summary['diagnostics_charts'] = {
-        'kelbow': create_kelbow_chart(model, X, **kwargs),
-        'silhouette': create_silhouette_chart(model, X, **kwargs)}
+    kmeans_summary["all_params"] = get_estimator_params(model)
+    kmeans_summary["cluster_labels"] = get_cluster_labels(model, X, nrows=nrows, **kwargs)
+    kmeans_summary["diagnostics_charts"] = {
+        "kelbow": create_kelbow_chart(model, X, **kwargs),
+        "silhouette": create_silhouette_chart(model, X, **kwargs),
+    }
 
     return kmeans_summary
 
@@ -303,7 +315,7 @@ def get_estimator_params(estimator):
             run = neptune.init(project='my_workspace/my_project')
             run['estimator/params'] = npt_utils.get_estimator_params(rfr)
     """
-    assert isinstance(estimator, BaseEstimator), 'Estimator should be a sklearn estimator.'
+    assert isinstance(estimator, BaseEstimator), "Estimator should be a sklearn estimator."
 
     return estimator.get_params()
 
@@ -333,8 +345,7 @@ def get_pickled_model(estimator):
             run = neptune.init(project='my_workspace/my_project')
             run['estimator/pickled_model'] = npt_utils.get_pickled_model(rfr)
     """
-    assert is_regressor(estimator) or is_classifier(estimator), \
-        'Estimator should be sklearn regressor or classifier.'
+    assert is_regressor(estimator) or is_classifier(estimator), "Estimator should be sklearn regressor or classifier."
 
     return neptune.types.File.as_pickle(estimator)
 
@@ -376,9 +387,8 @@ def get_test_preds(estimator, X_test, y_test, y_pred=None, nrows=1000):
             run = neptune.init(project='my_workspace/my_project')
             run['estimator/pickled_model'] = npt_utils.compute_test_preds(rfr, X_test, y_test)
     """
-    assert is_regressor(estimator) or is_classifier(estimator), \
-        'Estimator should be sklearn regressor or classifier.'
-    assert isinstance(nrows, int), 'nrows should be integer, {} was passed'.format(type(nrows))
+    assert is_regressor(estimator) or is_classifier(estimator), "Estimator should be sklearn regressor or classifier."
+    assert isinstance(nrows, int), "nrows should be integer, {} was passed".format(type(nrows))
 
     preds = None
 
@@ -387,15 +397,15 @@ def get_test_preds(estimator, X_test, y_test, y_pred=None, nrows=1000):
 
     # single output
     if len(y_pred.shape) == 1:
-        df = pd.DataFrame(data={'y_true': y_test, 'y_pred': y_pred})
+        df = pd.DataFrame(data={"y_true": y_test, "y_pred": y_pred})
         df = df.head(n=nrows)
         preds = neptune.types.File.as_html(df)
     # multi output
     if len(y_pred.shape) == 2:
         df = pd.DataFrame()
         for j in range(y_pred.shape[1]):
-            df['y_test_output_{}'.format(j)] = y_test[:, j]
-            df['y_pred_output_{}'.format(j)] = y_pred[:, j]
+            df["y_test_output_{}".format(j)] = y_test[:, j]
+            df["y_pred_output_{}".format(j)] = y_pred[:, j]
         df = df.head(n=nrows)
         preds = neptune.types.File.as_html(df)
 
@@ -440,19 +450,19 @@ def get_test_preds_proba(classifier, X_test=None, y_pred_proba=None, nrows=1000)
             run = neptune.init(project='my_workspace/my_project')
             run['estimator/pickled_model'] = npt_utils.compute_test_preds(rfc, X_test)
     """
-    assert is_classifier(classifier), 'Classifier should be sklearn classifier.'
-    assert isinstance(nrows, int), 'nrows should be integer, {} was passed'.format(type(nrows))
+    assert is_classifier(classifier), "Classifier should be sklearn classifier."
+    assert isinstance(nrows, int), "nrows should be integer, {} was passed".format(type(nrows))
 
     if X_test is not None and y_pred_proba is not None:
-        raise ValueError('X_test and y_pred_proba are mutually exclusive')
+        raise ValueError("X_test and y_pred_proba are mutually exclusive")
     if X_test is None and y_pred_proba is None:
-        raise ValueError('X_test or y_pred_proba is required')
+        raise ValueError("X_test or y_pred_proba is required")
 
     if y_pred_proba is None:
         try:
             y_pred_proba = classifier.predict_proba(X_test)
         except Exception as e:
-            print('This classifier does not provide predictions probabilities. Error: {}'.format(e))
+            print("This classifier does not provide predictions probabilities. Error: {}".format(e))
             return
 
     df = pd.DataFrame(data=y_pred_proba, columns=classifier.classes_)
@@ -519,8 +529,7 @@ def get_scores(estimator, X, y, y_pred=None):
             run = neptune.init(project='my_workspace/my_project')
             run['estimator/scores'] = npt_utils.get_scores(rfc, X, y)
     """
-    assert is_regressor(estimator) or is_classifier(estimator), \
-        'Estimator should be sklearn regressor or classifier.'
+    assert is_regressor(estimator) or is_classifier(estimator), "Estimator should be sklearn regressor or classifier."
 
     scores_dict = {}
 
@@ -535,23 +544,25 @@ def get_scores(estimator, X, y, y_pred=None):
             mae = mean_absolute_error(y, y_pred)
             r2 = r2_score(y, y_pred)
 
-            scores_dict['explained_variance_score'] = evs
-            scores_dict['max_error'] = me
-            scores_dict['mean_absolute_error'] = mae
-            scores_dict['r2_score'] = r2
+            scores_dict["explained_variance_score"] = evs
+            scores_dict["max_error"] = me
+            scores_dict["mean_absolute_error"] = mae
+            scores_dict["r2_score"] = r2
 
         # multi output
         if len(y_pred.shape) == 2:
             r2 = estimator.score(X, y)
-            scores_dict['r2_score'] = r2
+            scores_dict["r2_score"] = r2
 
     elif is_classifier(estimator):
         precision, recall, fbeta_score, support = precision_recall_fscore_support(y, y_pred)
         for i, value in enumerate(precision):
-            scores_dict['class_{}'.format(i)] = {'precision': value,
-                                                 'recall': recall[i],
-                                                 'fbeta_score': fbeta_score[i],
-                                                 'support': support[i]}
+            scores_dict["class_{}".format(i)] = {
+                "precision": value,
+                "recall": recall[i],
+                "fbeta_score": fbeta_score[i],
+                "support": support[i],
+            }
     return scores_dict
 
 
@@ -585,7 +596,7 @@ def create_learning_curve_chart(regressor, X_train, y_train):
             run = neptune.init(project='my_workspace/my_project')
             run['visuals/learning_curve'] = npt_utils.create_learning_curve_chart(rfr, X_train, y_train)
     """
-    assert is_regressor(regressor), 'regressor should be sklearn regressor.'
+    assert is_regressor(regressor), "regressor should be sklearn regressor."
 
     chart = None
 
@@ -596,7 +607,7 @@ def create_learning_curve_chart(regressor, X_train, y_train):
         chart = neptune.types.File.as_image(fig)
         plt.close(fig)
     except Exception as e:
-        print('Did not log learning curve chart. Error: {}'.format(e))
+        print("Did not log learning curve chart. Error: {}".format(e))
 
     return chart
 
@@ -631,7 +642,7 @@ def create_feature_importance_chart(regressor, X_train, y_train):
             run = neptune.init(project='my_workspace/my_project')
             run['visuals/feature_importance'] = npt_utils.create_feature_importance_chart(rfr, X_train, y_train)
     """
-    assert is_regressor(regressor), 'regressor should be sklearn regressor.'
+    assert is_regressor(regressor), "regressor should be sklearn regressor."
 
     chart = None
 
@@ -644,7 +655,7 @@ def create_feature_importance_chart(regressor, X_train, y_train):
         chart = neptune.types.File.as_image(fig)
         plt.close(fig)
     except Exception as e:
-        print('Did not log feature importance chart. Error: {}'.format(e))
+        print("Did not log feature importance chart. Error: {}".format(e))
 
     return chart
 
@@ -683,7 +694,7 @@ def create_residuals_chart(regressor, X_train, X_test, y_train, y_test):
             run = neptune.init(project='my_workspace/my_project')
             run['visuals/residuals'] = npt_utils.create_residuals_chart(rfr, X_train, X_test, y_train, y_test)
     """
-    assert is_regressor(regressor), 'regressor should be sklearn regressor.'
+    assert is_regressor(regressor), "regressor should be sklearn regressor."
 
     chart = None
 
@@ -696,7 +707,7 @@ def create_residuals_chart(regressor, X_train, X_test, y_train, y_test):
         chart = neptune.types.File.as_image(fig)
         plt.close(fig)
     except Exception as e:
-        print('Did not log residuals chart. Error: {}'.format(e))
+        print("Did not log residuals chart. Error: {}".format(e))
 
     return chart
 
@@ -735,7 +746,7 @@ def create_prediction_error_chart(regressor, X_train, X_test, y_train, y_test):
             run = neptune.init(project='my_workspace/my_project')
             run['prediction_error'] = npt_utils.create_prediction_error_chart(rfr, X_train, X_test, y_train, y_test)
     """
-    assert is_regressor(regressor), 'regressor should be sklearn regressor.'
+    assert is_regressor(regressor), "regressor should be sklearn regressor."
 
     chart = None
 
@@ -748,7 +759,7 @@ def create_prediction_error_chart(regressor, X_train, X_test, y_train, y_test):
         chart = neptune.types.File.as_image(fig)
         plt.close(fig)
     except Exception as e:
-        print('Did not log prediction error chart. Error: {}'.format(e))
+        print("Did not log prediction error chart. Error: {}".format(e))
 
     return chart
 
@@ -783,7 +794,7 @@ def create_cooks_distance_chart(regressor, X_train, y_train):
             run = neptune.init(project='my_workspace/my_project')
             run['visuals/cooks_distance'] = npt_utils.create_cooks_distance_chart(rfr, X_train, y_train)
     """
-    assert is_regressor(regressor), 'regressor should be sklearn regressor.'
+    assert is_regressor(regressor), "regressor should be sklearn regressor."
 
     chart = None
 
@@ -795,7 +806,7 @@ def create_cooks_distance_chart(regressor, X_train, y_train):
         chart = neptune.types.File.as_image(fig)
         plt.close(fig)
     except Exception as e:
-        print('Did not log cooks distance chart. Error: {}'.format(e))
+        print("Did not log cooks distance chart. Error: {}".format(e))
 
     return chart
 
@@ -835,7 +846,7 @@ def create_classification_report_chart(classifier, X_train, X_test, y_train, y_t
             run['visuals/classification_report'] = \
                 npt_utils.create_classification_report_chart(rfc, X_train, X_test, y_train, y_test)
     """
-    assert is_classifier(classifier), 'classifier should be sklearn classifier.'
+    assert is_classifier(classifier), "classifier should be sklearn classifier."
 
     chart = None
 
@@ -848,7 +859,7 @@ def create_classification_report_chart(classifier, X_train, X_test, y_train, y_t
         chart = neptune.types.File.as_image(fig)
         plt.close(fig)
     except Exception as e:
-        print('Did not log Classification Report chart. Error: {}'.format(e))
+        print("Did not log Classification Report chart. Error: {}".format(e))
 
     return chart
 
@@ -888,7 +899,7 @@ def create_confusion_matrix_chart(classifier, X_train, X_test, y_train, y_test):
             run['visuals/confusion_matrix'] = \
                 npt_utils.create_confusion_matrix_chart(rfc, X_train, X_test, y_train, y_test)
     """
-    assert is_classifier(classifier), 'classifier should be sklearn classifier.'
+    assert is_classifier(classifier), "classifier should be sklearn classifier."
 
     chart = None
 
@@ -901,7 +912,7 @@ def create_confusion_matrix_chart(classifier, X_train, X_test, y_train, y_test):
         chart = neptune.types.File.as_image(fig)
         plt.close(fig)
     except Exception as e:
-        print('Did not log Confusion Matrix chart. Error: {}'.format(e))
+        print("Did not log Confusion Matrix chart. Error: {}".format(e))
 
     return chart
 
@@ -940,7 +951,7 @@ def create_roc_auc_chart(classifier, X_train, X_test, y_train, y_test):
             run = neptune.init(project='my_workspace/my_project')
             run['visuals/roc_auc'] = npt_utils.create_roc_auc_chart(rfc, X_train, X_test, y_train, y_test)
     """
-    assert is_classifier(classifier), 'classifier should be sklearn classifier.'
+    assert is_classifier(classifier), "classifier should be sklearn classifier."
 
     chart = None
 
@@ -953,7 +964,7 @@ def create_roc_auc_chart(classifier, X_train, X_test, y_train, y_test):
         chart = neptune.types.File.as_image(fig)
         plt.close(fig)
     except Exception as e:
-        print('Did not log ROC-AUC chart. Error {}'.format(e))
+        print("Did not log ROC-AUC chart. Error {}".format(e))
 
     return chart
 
@@ -990,7 +1001,7 @@ def create_precision_recall_chart(classifier, X_test, y_test, y_pred_proba=None)
             run = neptune.init(project='my_workspace/my_project')
             run['visuals/precision_recall'] = npt_utils.create_precision_recall_chart(rfc, X_test, y_test)
     """
-    assert is_classifier(classifier), 'classifier should be sklearn classifier.'
+    assert is_classifier(classifier), "classifier should be sklearn classifier."
 
     chart = None
 
@@ -998,8 +1009,10 @@ def create_precision_recall_chart(classifier, X_test, y_test, y_pred_proba=None)
         try:
             y_pred_proba = classifier.predict_proba(X_test)
         except Exception as e:
-            print('Did not log Precision-Recall chart: this classifier does not provide predictions probabilities.'
-                  'Error {}'.format(e))
+            print(
+                "Did not log Precision-Recall chart: this classifier does not provide predictions probabilities."
+                "Error {}".format(e)
+            )
             return chart
 
     try:
@@ -1008,7 +1021,7 @@ def create_precision_recall_chart(classifier, X_test, y_test, y_pred_proba=None)
         chart = neptune.types.File.as_image(fig)
         plt.close(fig)
     except Exception as e:
-        print('Did not log Precision-Recall chart. Error {}'.format(e))
+        print("Did not log Precision-Recall chart. Error {}".format(e))
 
     return chart
 
@@ -1048,7 +1061,7 @@ def create_class_prediction_error_chart(classifier, X_train, X_test, y_train, y_
             run['visuals/class_prediction_error'] = \
                 npt_utils.create_class_prediction_error_chart(rfc, X_train, X_test, y_train, y_test)
     """
-    assert is_classifier(classifier), 'classifier should be sklearn classifier.'
+    assert is_classifier(classifier), "classifier should be sklearn classifier."
 
     chart = None
 
@@ -1061,7 +1074,7 @@ def create_class_prediction_error_chart(classifier, X_train, X_test, y_train, y_
         chart = neptune.types.File.as_image(fig)
         plt.close(fig)
     except Exception as e:
-        print('Did not log Class Prediction Error chart. Error {}'.format(e))
+        print("Did not log Class Prediction Error chart. Error {}".format(e))
 
     return chart
 
@@ -1098,12 +1111,12 @@ def get_cluster_labels(model, X, nrows=1000, **kwargs):
             run = neptune.init(project='my_workspace/my_project')
             run['kmeans/cluster_labels'] = npt_utils.get_cluster_labels(km, X)
     """
-    assert isinstance(model, KMeans), 'Model should be sklearn KMeans instance.'
-    assert isinstance(nrows, int), 'nrows should be integer, {} was passed'.format(type(nrows))
+    assert isinstance(model, KMeans), "Model should be sklearn KMeans instance."
+    assert isinstance(nrows, int), "nrows should be integer, {} was passed".format(type(nrows))
 
     model.set_params(**kwargs)
     labels = model.fit_predict(X)
-    df = pd.DataFrame(data={'cluster_labels': labels})
+    df = pd.DataFrame(data={"cluster_labels": labels})
     df = df.head(n=nrows)
 
     return neptune.types.File.as_html(df)
@@ -1139,14 +1152,14 @@ def create_kelbow_chart(model, X, **kwargs):
             run = neptune.init(project='my_workspace/my_project')
             run['kmeans/kelbow'] = npt_utils.create_kelbow_chart(km, X)
     """
-    assert isinstance(model, KMeans), 'Model should be sklearn KMeans instance.'
+    assert isinstance(model, KMeans), "Model should be sklearn KMeans instance."
 
     chart = None
 
     model.set_params(**kwargs)
 
-    if 'n_clusters' in kwargs:
-        k = kwargs['n_clusters']
+    if "n_clusters" in kwargs:
+        k = kwargs["n_clusters"]
     else:
         k = 10
 
@@ -1158,7 +1171,7 @@ def create_kelbow_chart(model, X, **kwargs):
         chart = neptune.types.File.as_image(fig)
         plt.close(fig)
     except Exception as e:
-        print('Did not log KMeans elbow chart. Error {}'.format(e))
+        print("Did not log KMeans elbow chart. Error {}".format(e))
 
     return chart
 
@@ -1195,16 +1208,16 @@ def create_silhouette_chart(model, X, **kwargs):
             run = neptune.init(project='my_workspace/my_project')
             run['kmeans/silhouette'] = npt_utils.create_silhouette_chart(km, X, n_clusters=12)
     """
-    assert isinstance(model, KMeans), 'Model should be sklearn KMeans instance.'
+    assert isinstance(model, KMeans), "Model should be sklearn KMeans instance."
 
     charts = []
 
     model.set_params(**kwargs)
 
-    n_clusters = model.get_params()['n_clusters']
+    n_clusters = model.get_params()["n_clusters"]
 
     for j in range(2, n_clusters + 1):
-        model.set_params(**{'n_clusters': j})
+        model.set_params(**{"n_clusters": j})
         model.fit(X)
 
         try:
@@ -1215,6 +1228,6 @@ def create_silhouette_chart(model, X, **kwargs):
             charts.append(neptune.types.File.as_image(fig))
             plt.close(fig)
         except Exception as e:
-            print('Did not log Silhouette Coefficients chart. Error {}'.format(e))
+            print("Did not log Silhouette Coefficients chart. Error {}".format(e))
 
     return neptune.types.FileSeries(charts)
