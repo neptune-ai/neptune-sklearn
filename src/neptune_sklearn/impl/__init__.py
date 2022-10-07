@@ -41,7 +41,11 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from scikitplot.estimators import plot_learning_curve
 from scikitplot.metrics import plot_precision_recall
-from sklearn.base import BaseEstimator, is_classifier, is_regressor
+from sklearn.base import (
+    BaseEstimator,
+    is_classifier,
+    is_regressor,
+)
 from sklearn.cluster import KMeans
 from sklearn.metrics import (
     explained_variance_score,
@@ -50,10 +54,22 @@ from sklearn.metrics import (
     precision_recall_fscore_support,
     r2_score,
 )
-from yellowbrick.classifier import ROCAUC, ClassificationReport, ClassPredictionError, ConfusionMatrix
-from yellowbrick.cluster import KElbowVisualizer, SilhouetteVisualizer
+from yellowbrick.classifier import (
+    ROCAUC,
+    ClassificationReport,
+    ClassPredictionError,
+    ConfusionMatrix,
+)
+from yellowbrick.cluster import (
+    KElbowVisualizer,
+    SilhouetteVisualizer,
+)
 from yellowbrick.model_selection import FeatureImportances
-from yellowbrick.regressor import CooksDistance, PredictionError, ResidualsPlot
+from yellowbrick.regressor import (
+    CooksDistance,
+    PredictionError,
+    ResidualsPlot,
+)
 
 try:
     # neptune-client=0.9.0 package structure
