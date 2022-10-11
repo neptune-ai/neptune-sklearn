@@ -14,7 +14,27 @@
 # limitations under the License.
 #
 
-from ._version import get_versions
-
-__version__ = get_versions()["version"]
-del get_versions
+from neptune_sklearn.impl import (
+    __version__,
+    create_class_prediction_error_chart,
+    create_classification_report_chart,
+    create_classifier_summary,
+    create_confusion_matrix_chart,
+    create_cooks_distance_chart,
+    create_feature_importance_chart,
+    create_kelbow_chart,
+    create_kmeans_summary,
+    create_learning_curve_chart,
+    create_precision_recall_chart,
+    create_prediction_error_chart,
+    create_regressor_summary,
+    create_residuals_chart,
+    create_roc_auc_chart,
+    create_silhouette_chart,
+    get_cluster_labels,
+    get_estimator_params,
+    get_pickled_model,
+    get_scores,
+    get_test_preds,
+    get_test_preds_proba,
+)
