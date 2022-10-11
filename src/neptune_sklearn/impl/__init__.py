@@ -35,6 +35,7 @@ __all__ = [
     "get_scores",
     "get_test_preds",
     "get_test_preds_proba",
+    "__version__",
 ]
 
 import matplotlib.pyplot as plt
