@@ -35,6 +35,7 @@ __all__ = [
     "get_scores",
     "get_test_preds",
     "get_test_preds_proba",
+    "__version__",
 ]
 
 import matplotlib.pyplot as plt
@@ -77,6 +78,10 @@ try:
 except ImportError:
     # neptune-client=1.0.0 package structure
     import neptune
+
+from neptune_sklearn._version import get_versions
+
+__version__ = get_versions()["version"]
 
 
 def create_regressor_summary(regressor, X_train, X_test, y_train, y_test, nrows=1000, log_charts=True):
