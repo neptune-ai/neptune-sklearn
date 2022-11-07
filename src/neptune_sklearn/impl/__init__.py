@@ -34,7 +34,7 @@ __all__ = [
     "get_pickled_model",
     "get_scores",
     "get_test_preds",
-    "get_test_preds_proba"
+    "get_test_preds_proba",
 ]
 
 import matplotlib.pyplot as plt
