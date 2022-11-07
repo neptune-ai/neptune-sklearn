@@ -38,8 +38,20 @@ __all__ = [
     "get_test_preds_proba",
 ]
 
+import sys
+
+if sys.version_info >= (3, 8):
+    from importlib.metadata import (
+        PackageNotFoundError,
+        version,
+    )
+else:
+    from importlib_metadata import (
+        PackageNotFoundError,
+        version,
+    )
+
 from neptune_sklearn.impl import (
-    __version__,
     create_class_prediction_error_chart,
     create_classification_report_chart,
     create_classifier_summary,
@@ -62,3 +74,9 @@ from neptune_sklearn.impl import (
     get_test_preds,
     get_test_preds_proba,
 )
+
+try:
+    __version__ = version("neptune-sklearn")
+except PackageNotFoundError:
+    # package is not installed
+    pass
