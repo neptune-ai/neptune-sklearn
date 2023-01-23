@@ -14,7 +14,7 @@ else:
     )
 
 try:
-    __version__ = version("neptune-tensorflow-keras")
+    __version__ = version("neptune-sklearn")
 except PackageNotFoundError:
     # package is not installed
     pass
