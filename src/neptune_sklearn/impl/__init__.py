@@ -78,6 +78,8 @@ except ImportError:
     # neptune-client=1.0.0 package structure
     import neptune
 
+from neptune_sklearn.impl.version import __version__
+
 
 def create_regressor_summary(regressor, X_train, X_test, y_train, y_test, nrows=1000, log_charts=True):
     """Create sklearn regressor summary.
@@ -160,6 +162,8 @@ def create_regressor_summary(regressor, X_train, X_test, y_train, y_test, nrows=
             "prediction_error": create_prediction_error_chart(regressor, X_train, X_test, y_train, y_test),
             "cooks_distance": create_cooks_distance_chart(regressor, X_train, y_train),
         }
+
+    reg_summary["integration/about/neptune-sklearn"] = __version__
 
     return reg_summary
 
@@ -248,6 +252,8 @@ def create_classifier_summary(classifier, X_train, X_test, y_train, y_test, nrow
             "class_prediction_error": create_class_prediction_error_chart(classifier, X_train, X_test, y_train, y_test),
         }
 
+    cls_summary["integration/about/neptune-sklearn"] = __version__
+
     return cls_summary
 
 
@@ -302,6 +308,8 @@ def create_kmeans_summary(model, X, nrows=1000, **kwargs):
         "kelbow": create_kelbow_chart(model, X, **kwargs),
         "silhouette": create_silhouette_chart(model, X, **kwargs),
     }
+
+    kmeans_summary["integration/about/neptune-sklearn"] = __version__
 
     return kmeans_summary
 
