@@ -1,7 +1,10 @@
-from sklearn.cluster import KMeans
-from sklearn.linear_model import LogisticRegression, LinearRegression
-from sklearn.model_selection import train_test_split
 from sklearn import datasets
+from sklearn.cluster import KMeans
+from sklearn.linear_model import (
+    LinearRegression,
+    LogisticRegression,
+)
+from sklearn.model_selection import train_test_split
 
 try:
     # neptune-client=0.9.0 package structure
