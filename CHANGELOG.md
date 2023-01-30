@@ -2,6 +2,7 @@
 
 ### Changes
 - `create_kmeans_summary` is now saving the pickled model to Neptune.
+- We use the `stringify_unsupported` to wrap the saved model parameters.
 
 ## neptune-sklearn 0.1.3
 
