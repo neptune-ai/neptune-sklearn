@@ -84,9 +84,7 @@ except ImportError:
 from neptune_sklearn.impl.version import __version__
 
 
-def create_regressor_summary(
-    regressor, X_train, X_test, y_train, y_test, nrows=1000, log_charts=True
-):
+def create_regressor_summary(regressor, X_train, X_test, y_train, y_test, nrows=1000, log_charts=True):
     """Create sklearn regressor summary.
 
     This method creates regressor summary that includes:
@@ -164,9 +162,7 @@ def create_regressor_summary(
             "learning_curve": create_learning_curve_chart(regressor, X_train, y_train),
             "feature_importance": create_feature_importance_chart(regressor, X_train, y_train),
             "residuals": create_residuals_chart(regressor, X_train, X_test, y_train, y_test),
-            "prediction_error": create_prediction_error_chart(
-                regressor, X_train, X_test, y_train, y_test
-            ),
+            "prediction_error": create_prediction_error_chart(regressor, X_train, X_test, y_train, y_test),
             "cooks_distance": create_cooks_distance_chart(regressor, X_train, y_train),
         }
 
@@ -175,9 +171,7 @@ def create_regressor_summary(
     return reg_summary
 
 
-def create_classifier_summary(
-    classifier, X_train, X_test, y_train, y_test, nrows=1000, log_charts=True
-):
+def create_classifier_summary(classifier, X_train, X_test, y_train, y_test, nrows=1000, log_charts=True):
     """Create sklearn classifier summary.
 
     This method creates classifier summary that includes:
@@ -254,17 +248,11 @@ def create_classifier_summary(
 
     if log_charts:
         cls_summary["diagnostics_charts"] = {
-            "classification_report": create_classification_report_chart(
-                classifier, X_train, X_test, y_train, y_test
-            ),
-            "confusion_matrix": create_confusion_matrix_chart(
-                classifier, X_train, X_test, y_train, y_test
-            ),
+            "classification_report": create_classification_report_chart(classifier, X_train, X_test, y_train, y_test),
+            "confusion_matrix": create_confusion_matrix_chart(classifier, X_train, X_test, y_train, y_test),
             "ROC_AUC": create_roc_auc_chart(classifier, X_train, X_test, y_train, y_test),
             "precision_recall": create_precision_recall_chart(classifier, X_test, y_test),
-            "class_prediction_error": create_class_prediction_error_chart(
-                classifier, X_train, X_test, y_train, y_test
-            ),
+            "class_prediction_error": create_class_prediction_error_chart(classifier, X_train, X_test, y_train, y_test),
         }
 
     cls_summary["integration/about/neptune-sklearn"] = __version__
@@ -430,9 +418,7 @@ def get_test_preds(estimator, X_test, y_test, y_pred=None, nrows=1000):
             run = neptune.init(project='my_workspace/my_project')
             run['estimator/pickled_model'] = npt_utils.compute_test_preds(rfr, X_test, y_test)
     """
-    assert is_regressor(estimator) or is_classifier(
-        estimator
-    ), "Estimator should be sklearn regressor or classifier."
+    assert is_regressor(estimator) or is_classifier(estimator), "Estimator should be sklearn regressor or classifier."
     assert isinstance(nrows, int), "nrows should be integer, {} was passed".format(type(nrows))
 
     preds = None
@@ -574,9 +560,7 @@ def get_scores(estimator, X, y, y_pred=None):
             run = neptune.init(project='my_workspace/my_project')
             run['estimator/scores'] = npt_utils.get_scores(rfc, X, y)
     """
-    assert is_regressor(estimator) or is_classifier(
-        estimator
-    ), "Estimator should be sklearn regressor or classifier."
+    assert is_regressor(estimator) or is_classifier(estimator), "Estimator should be sklearn regressor or classifier."
 
     scores_dict = {}
 
