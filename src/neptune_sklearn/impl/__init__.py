@@ -374,7 +374,7 @@ def get_pickled_model(estimator):
     """
     assert (
         is_regressor(estimator) or is_classifier(estimator) or isinstance(estimator, KMeans)
-    ), "Estimator should be sklearn regressor or classifier."
+    ), "Estimator should be sklearn regressor, classifier, or Kmeans instance."
 
     return neptune.types.File.as_pickle(estimator)
 
