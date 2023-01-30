@@ -1,3 +1,8 @@
+## neptune-sklearn 2.0.0
+
+### Changes
+- `create_kmeans_summary` is now saving the pickled model to Neptune.
+
 ## neptune-sklearn 0.1.3
 
 ### Changes
