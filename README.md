@@ -48,7 +48,7 @@ estimator.fit(X_train, y_train)
 
 # Import Neptune and start a run
 import neptune.new as neptune
-run = neptune.init(project="common/sklearn-integration",
+run = neptune.init_run(project="common/sklearn-integration",
                    api_token="ANONYMOUS")
 
 
