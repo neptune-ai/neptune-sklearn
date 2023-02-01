@@ -140,7 +140,7 @@ def create_regressor_summary(regressor, X_train, X_test, y_train, y_test, nrows=
             rfr = RandomForestRegressor()
             rfr.fit(X_train, y_train)
 
-            run = neptune.init(project='my_workspace/my_project')
+            run = neptune.init_run(project='my_workspace/my_project')
             run['random_forest/summary'] = npt_utils.create_regressor_summary(rfr, X_train, X_test, y_train, y_test)
     """
     assert is_regressor(regressor), "regressor should be sklearn regressor."
@@ -228,7 +228,7 @@ def create_classifier_summary(classifier, X_train, X_test, y_train, y_test, nrow
             rfc = RandomForestClassifier()
             rfc.fit(X_train, y_train)
 
-            run = neptune.init(project='my_workspace/my_project')
+            run = neptune.init_run(project='my_workspace/my_project')
             run['random_forest/summary'] = npt_utils.create_classifier_summary(rfc, X_train, X_test, y_train, y_test)
     """
     assert is_classifier(classifier), "classifier should be sklearn classifier."
@@ -298,7 +298,7 @@ def create_kmeans_summary(model, X, nrows=1000, **kwargs):
             km = KMeans(n_init=11, max_iter=270)
             X, y = make_blobs(n_samples=579, n_features=17, centers=7, random_state=28743)
 
-            run = neptune.init(project='my_workspace/my_project')
+            run = neptune.init_run(project='my_workspace/my_project')
             run['kmeans/summary'] = npt_utils.create_kmeans_summary(km, X)
     """
     assert isinstance(model, KMeans), "model should be sklearn KMeans instance"
@@ -341,7 +341,7 @@ def get_estimator_params(estimator):
 
             rfr = RandomForestRegressor()
 
-            run = neptune.init(project='my_workspace/my_project')
+            run = neptune.init_run(project='my_workspace/my_project')
             run['estimator/params'] = npt_utils.get_estimator_params(rfr)
     """
     assert isinstance(estimator, BaseEstimator), "Estimator should be a sklearn estimator."
@@ -371,7 +371,7 @@ def get_pickled_model(estimator):
 
             rfr = RandomForestRegressor()
 
-            run = neptune.init(project='my_workspace/my_project')
+            run = neptune.init_run(project='my_workspace/my_project')
             run['estimator/pickled_model'] = npt_utils.get_pickled_model(rfr)
     """
     assert (
@@ -415,7 +415,7 @@ def get_test_preds(estimator, X_test, y_test, y_pred=None, nrows=1000):
 
             rfr = RandomForestRegressor()
 
-            run = neptune.init(project='my_workspace/my_project')
+            run = neptune.init_run(project='my_workspace/my_project')
             run['estimator/pickled_model'] = npt_utils.compute_test_preds(rfr, X_test, y_test)
     """
     assert is_regressor(estimator) or is_classifier(estimator), "Estimator should be sklearn regressor or classifier."
@@ -478,7 +478,7 @@ def get_test_preds_proba(classifier, X_test=None, y_pred_proba=None, nrows=1000)
             rfc = RandomForestClassifier()
             rfc.fit(X_train, y_train)
 
-            run = neptune.init(project='my_workspace/my_project')
+            run = neptune.init_run(project='my_workspace/my_project')
             run['estimator/pickled_model'] = npt_utils.compute_test_preds(rfc, X_test)
     """
     assert is_classifier(classifier), "Classifier should be sklearn classifier."
@@ -557,7 +557,7 @@ def get_scores(estimator, X, y, y_pred=None):
             rfc = RandomForestClassifier()
             rfc.fit(X_train, y_train)
 
-            run = neptune.init(project='my_workspace/my_project')
+            run = neptune.init_run(project='my_workspace/my_project')
             run['estimator/scores'] = npt_utils.get_scores(rfc, X, y)
     """
     assert is_regressor(estimator) or is_classifier(estimator), "Estimator should be sklearn regressor or classifier."
@@ -624,7 +624,7 @@ def create_learning_curve_chart(regressor, X_train, y_train):
             rfr = RandomForestRegressor()
             rfr.fit(X_train, y_train)
 
-            run = neptune.init(project='my_workspace/my_project')
+            run = neptune.init_run(project='my_workspace/my_project')
             run['visuals/learning_curve'] = npt_utils.create_learning_curve_chart(rfr, X_train, y_train)
     """
     assert is_regressor(regressor), "regressor should be sklearn regressor."
@@ -670,7 +670,7 @@ def create_feature_importance_chart(regressor, X_train, y_train):
             rfr = RandomForestRegressor()
             rfr.fit(X_train, y_train)
 
-            run = neptune.init(project='my_workspace/my_project')
+            run = neptune.init_run(project='my_workspace/my_project')
             run['visuals/feature_importance'] = npt_utils.create_feature_importance_chart(rfr, X_train, y_train)
     """
     assert is_regressor(regressor), "regressor should be sklearn regressor."
@@ -722,7 +722,7 @@ def create_residuals_chart(regressor, X_train, X_test, y_train, y_test):
             rfr = RandomForestRegressor()
             rfr.fit(X_train, y_train)
 
-            run = neptune.init(project='my_workspace/my_project')
+            run = neptune.init_run(project='my_workspace/my_project')
             run['visuals/residuals'] = npt_utils.create_residuals_chart(rfr, X_train, X_test, y_train, y_test)
     """
     assert is_regressor(regressor), "regressor should be sklearn regressor."
@@ -774,7 +774,7 @@ def create_prediction_error_chart(regressor, X_train, X_test, y_train, y_test):
             rfr = RandomForestRegressor()
             rfr.fit(X_train, y_train)
 
-            run = neptune.init(project='my_workspace/my_project')
+            run = neptune.init_run(project='my_workspace/my_project')
             run['prediction_error'] = npt_utils.create_prediction_error_chart(rfr, X_train, X_test, y_train, y_test)
     """
     assert is_regressor(regressor), "regressor should be sklearn regressor."
@@ -822,7 +822,7 @@ def create_cooks_distance_chart(regressor, X_train, y_train):
             rfr = RandomForestRegressor()
             rfr.fit(X_train, y_train)
 
-            run = neptune.init(project='my_workspace/my_project')
+            run = neptune.init_run(project='my_workspace/my_project')
             run['visuals/cooks_distance'] = npt_utils.create_cooks_distance_chart(rfr, X_train, y_train)
     """
     assert is_regressor(regressor), "regressor should be sklearn regressor."
@@ -873,7 +873,7 @@ def create_classification_report_chart(classifier, X_train, X_test, y_train, y_t
             rfc = RandomForestClassifier()
             rfc.fit(X_train, y_train)
 
-            run = neptune.init(project='my_workspace/my_project')
+            run = neptune.init_run(project='my_workspace/my_project')
             run['visuals/classification_report'] = \
                 npt_utils.create_classification_report_chart(rfc, X_train, X_test, y_train, y_test)
     """
@@ -926,7 +926,7 @@ def create_confusion_matrix_chart(classifier, X_train, X_test, y_train, y_test):
             rfc = RandomForestClassifier()
             rfc.fit(X_train, y_train)
 
-            run = neptune.init(project='my_workspace/my_project')
+            run = neptune.init_run(project='my_workspace/my_project')
             run['visuals/confusion_matrix'] = \
                 npt_utils.create_confusion_matrix_chart(rfc, X_train, X_test, y_train, y_test)
     """
@@ -979,7 +979,7 @@ def create_roc_auc_chart(classifier, X_train, X_test, y_train, y_test):
             rfc = RandomForestClassifier()
             rfc.fit(X_train, y_train)
 
-            run = neptune.init(project='my_workspace/my_project')
+            run = neptune.init_run(project='my_workspace/my_project')
             run['visuals/roc_auc'] = npt_utils.create_roc_auc_chart(rfc, X_train, X_test, y_train, y_test)
     """
     assert is_classifier(classifier), "classifier should be sklearn classifier."
@@ -1029,7 +1029,7 @@ def create_precision_recall_chart(classifier, X_test, y_test, y_pred_proba=None)
             rfc = RandomForestClassifier()
             rfc.fit(X_train, y_train)
 
-            run = neptune.init(project='my_workspace/my_project')
+            run = neptune.init_run(project='my_workspace/my_project')
             run['visuals/precision_recall'] = npt_utils.create_precision_recall_chart(rfc, X_test, y_test)
     """
     assert is_classifier(classifier), "classifier should be sklearn classifier."
@@ -1088,7 +1088,7 @@ def create_class_prediction_error_chart(classifier, X_train, X_test, y_train, y_
             rfc = RandomForestClassifier()
             rfc.fit(X_train, y_train)
 
-            run = neptune.init(project='my_workspace/my_project')
+            run = neptune.init_run(project='my_workspace/my_project')
             run['visuals/class_prediction_error'] = \
                 npt_utils.create_class_prediction_error_chart(rfc, X_train, X_test, y_train, y_test)
     """
@@ -1139,7 +1139,7 @@ def get_cluster_labels(model, X, nrows=1000, **kwargs):
             km = KMeans(n_init=11, max_iter=270)
             X, y = make_blobs(n_samples=579, n_features=17, centers=7, random_state=28743)
 
-            run = neptune.init(project='my_workspace/my_project')
+            run = neptune.init_run(project='my_workspace/my_project')
             run['kmeans/cluster_labels'] = npt_utils.get_cluster_labels(km, X)
     """
     assert isinstance(model, KMeans), "Model should be sklearn KMeans instance."
@@ -1180,7 +1180,7 @@ def create_kelbow_chart(model, X, **kwargs):
             km = KMeans(n_init=11, max_iter=270)
             X, y = make_blobs(n_samples=579, n_features=17, centers=7, random_state=28743)
 
-            run = neptune.init(project='my_workspace/my_project')
+            run = neptune.init_run(project='my_workspace/my_project')
             run['kmeans/kelbow'] = npt_utils.create_kelbow_chart(km, X)
     """
     assert isinstance(model, KMeans), "Model should be sklearn KMeans instance."
@@ -1236,7 +1236,7 @@ def create_silhouette_chart(model, X, **kwargs):
             km = KMeans(n_init=11, max_iter=270)
             X, y = make_blobs(n_samples=579, n_features=17, centers=7, random_state=28743)
 
-            run = neptune.init(project='my_workspace/my_project')
+            run = neptune.init_run(project='my_workspace/my_project')
             run['kmeans/silhouette'] = npt_utils.create_silhouette_chart(km, X, n_clusters=12)
     """
     assert isinstance(model, KMeans), "Model should be sklearn KMeans instance."
