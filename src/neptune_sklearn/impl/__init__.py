@@ -41,19 +41,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from scikitplot.estimators import plot_learning_curve
 from scikitplot.metrics import plot_precision_recall
-from sklearn.base import (
-    BaseEstimator,
-    is_classifier,
-    is_regressor,
-)
-from sklearn.cluster import KMeans
-from sklearn.metrics import (
-    explained_variance_score,
-    max_error,
-    mean_absolute_error,
-    precision_recall_fscore_support,
-    r2_score,
-)
 from yellowbrick.classifier import (
     ROCAUC,
     ClassificationReport,
@@ -69,6 +56,20 @@ from yellowbrick.regressor import (
     CooksDistance,
     PredictionError,
     ResidualsPlot,
+)
+
+from sklearn.base import (
+    BaseEstimator,
+    is_classifier,
+    is_regressor,
+)
+from sklearn.cluster import KMeans
+from sklearn.metrics import (
+    explained_variance_score,
+    max_error,
+    mean_absolute_error,
+    precision_recall_fscore_support,
+    r2_score,
 )
 
 try:
@@ -263,6 +264,7 @@ def create_kmeans_summary(model, X, nrows=1000, **kwargs):
     This method fit KMeans model to data and logs:
 
     * all kmeans parameters,
+    * pickled estimator (model),
     * cluster labels,
     * clustering visualizations: KMeans elbow chart and silhouette coefficients chart.
 
@@ -303,6 +305,7 @@ def create_kmeans_summary(model, X, nrows=1000, **kwargs):
     model.set_params(**kwargs)
 
     kmeans_summary["all_params"] = get_estimator_params(model)
+    kmeans_summary["pickled_model"] = get_pickled_model(model)
     kmeans_summary["cluster_labels"] = get_cluster_labels(model, X, nrows=nrows, **kwargs)
     kmeans_summary["diagnostics_charts"] = {
         "kelbow": create_kelbow_chart(model, X, **kwargs),
@@ -369,7 +372,9 @@ def get_pickled_model(estimator):
             run = neptune.init(project='my_workspace/my_project')
             run['estimator/pickled_model'] = npt_utils.get_pickled_model(rfr)
     """
-    assert is_regressor(estimator) or is_classifier(estimator), "Estimator should be sklearn regressor or classifier."
+    assert (
+        is_regressor(estimator) or is_classifier(estimator) or isinstance(estimator, KMeans)
+    ), "Estimator should be sklearn regressor, classifier, or Kmeans instance."
 
     return neptune.types.File.as_pickle(estimator)
 
