@@ -38,9 +38,24 @@ __all__ = [
 ]
 
 import matplotlib.pyplot as plt
+import neptune
 import pandas as pd
+from neptune.utils import stringify_unsupported
 from scikitplot.estimators import plot_learning_curve
 from scikitplot.metrics import plot_precision_recall
+from sklearn.base import (
+    BaseEstimator,
+    is_classifier,
+    is_regressor,
+)
+from sklearn.cluster import KMeans
+from sklearn.metrics import (
+    explained_variance_score,
+    max_error,
+    mean_absolute_error,
+    precision_recall_fscore_support,
+    r2_score,
+)
 from yellowbrick.classifier import (
     ROCAUC,
     ClassificationReport,
@@ -57,29 +72,6 @@ from yellowbrick.regressor import (
     PredictionError,
     ResidualsPlot,
 )
-
-from sklearn.base import (
-    BaseEstimator,
-    is_classifier,
-    is_regressor,
-)
-from sklearn.cluster import KMeans
-from sklearn.metrics import (
-    explained_variance_score,
-    max_error,
-    mean_absolute_error,
-    precision_recall_fscore_support,
-    r2_score,
-)
-
-try:
-    # neptune-client=0.9.0 package structure
-    import neptune.new as neptune
-    from neptune.new.utils import stringify_unsupported
-except ImportError:
-    # neptune-client=1.0.0 package structure
-    import neptune
-    from neptune.utils import stringify_unsupported
 
 from neptune_sklearn.impl.version import __version__
 
