@@ -77,63 +77,43 @@ from neptune_sklearn.impl.version import __version__
 
 
 def create_regressor_summary(regressor, X_train, X_test, y_train, y_test, nrows=1000, log_charts=True):
-    """Create sklearn regressor summary.
+    """Creates scikit-learn regressor summary.
 
-    This method creates regressor summary that includes:
+    The summary includes:
 
-    * all regressor parameters,
-    * pickled estimator (model),
-    * test predictions,
-    * test scores,
-    * model performance visualizations.
+    - all regressor parameters,
+    - pickled estimator (model),
+    - test predictions,
+    - test scores,
+    - model performance visualizations.
 
-    Returned ``dict`` can be assigned to the run's namespace defined by the user (see example below).
-
-    Regressor should be fitted before calling this function.
-
-    Tip:
-        Check Sklearn-Neptune integration
-        `documentation <https://docs-beta.neptune.ai/essentials/integrations/machine-learning-frameworks/sklearn>`_
-        for the full example.
+    The regressor should be fitted before calling this function.
 
     Args:
-        regressor (:obj:`regressor`):
-            | Fitted sklearn regressor object
-        X_train (:obj:`ndarray`):
-            | Training data matrix
-        X_test (:obj:`ndarray`):
-            | Testing data matrix
-        y_train (:obj:`ndarray`):
-            | The regression target for training
-        y_test (:obj:`ndarray`):
-            | The regression target for testing
-        nrows (`int`, optional, default is 1000):
-            | Log first ``nrows`` rows of test predictions.
-        log_charts (:bool:, optional, default is ``True``):
-            | If ``True``, calculate and log chart visualizations.
-            |
-            | NOTE: calculating visualizations is potentially expensive depending on input data and regressor, and
-            | may take some time to finish.
-            |
-            | This is equivalent to calling ``log_learning_curve_chart``, ``log_feature_importance_chart``,
-            | ``log_residuals_chart``, ``log_prediction_error_chart``, ``log_cooks_distance_chart``
-            | functions from this module.
+        regressor (`regressor`): Fitted scikit-learn regressor object.
+        X_train (`ndarray`): Training data matrix.
+        X_test (`ndarray`): Testing data matrix.
+        y_train (`ndarray`): The regression target for training.
+        y_test (`ndarray`): The regression target for testing.
+        nrows (`int`, optional): Log first `nrows` rows of test predictions.
+        log_charts (`bool`, optional): Whether to calculate and log chart visualizations.
+            Note: Calculating visualizations is potentially expensive depending on input data and regressor,
+            and may take some time to finish. This is equivalent to calling the following functions from
+            this module: `log_learning_curve_chart()`, `log_feature_importance_chart()`, `log_residuals_chart()`,
+            `log_prediction_error_chart()`, and `log_cooks_distance_chart()`.
 
     Returns:
-        ``dict`` with all summary items.
+        `dict` with all summary items.
 
-    Examples:
-        Log random forest regressor summary.
+    Example:
+        import neptune
+        import neptune.integrations.sklearn as npt_utils
 
-        .. code:: python3
+        rfr = RandomForestRegressor()
+        rfr.fit(X_train, y_train)
 
-            import neptune.new.integrations.sklearn as npt_utils
-
-            rfr = RandomForestRegressor()
-            rfr.fit(X_train, y_train)
-
-            run = neptune.init_run(project='my_workspace/my_project')
-            run['random_forest/summary'] = npt_utils.create_regressor_summary(rfr, X_train, X_test, y_train, y_test)
+        run = neptune.init_run()
+        run["random_forest/summary"] = npt_utils.create_regressor_summary(rfr, X_train, X_test, y_train, y_test)
     """
     assert is_regressor(regressor), "regressor should be sklearn regressor."
 
@@ -164,64 +144,44 @@ def create_regressor_summary(regressor, X_train, X_test, y_train, y_test, nrows=
 
 
 def create_classifier_summary(classifier, X_train, X_test, y_train, y_test, nrows=1000, log_charts=True):
-    """Create sklearn classifier summary.
+    """Creates scikit-learn classifier summary.
 
-    This method creates classifier summary that includes:
+    The summary includes:
 
-    * all classifier parameters,
-    * pickled estimator (model),
-    * test predictions,
-    * test predictions probabilities,
-    * test scores,
-    * model performance visualizations.
+    - all classifier parameters,
+    - pickled estimator (model),
+    - test predictions,
+    - test predictions probabilities,
+    - test scores,
+    - model performance visualizations.
 
-    Returned ``dict`` can be assigned to the run's namespace defined by the user (see example below).
-
-    Classifier should be fitted before calling this function.
-
-    Tip:
-        Check Sklearn-Neptune integration
-        `documentation <https://docs-beta.neptune.ai/essentials/integrations/machine-learning-frameworks/sklearn>`_
-        for the full example.
+    The classifier should be fitted before calling this function.
 
     Args:
-        classifier (:obj:`classifier`):
-            | Fitted sklearn classifier object
-        X_train (:obj:`ndarray`):
-            | Training data matrix
-        X_test (:obj:`ndarray`):
-            | Testing data matrix
-        y_train (:obj:`ndarray`):
-            | The classification target for training
-        y_test (:obj:`ndarray`):
-            | The classification target for testing
-        nrows (`int`, optional, default is 1000):
-            | Log first ``nrows`` rows of test predictions and predictions probabilities.
-        log_charts (:bool:, optional, default is ``True``):
-            | If True, calculate and send chart visualizations.
-            |
-            | NOTE: calculating visualizations is potentially expensive depending on input data and classifier, and
-            | may take some time to finish.
-            |
-            | This is equivalent to calling ``log_classification_report_chart``, ``log_confusion_matrix_chart``,
-            | ``log_roc_auc_chart``, ``log_precision_recall_chart``, ``log_class_prediction_error_chart``
-            | functions from this module.
+        classifier (`classifier`): Fitted scikit-learn classifier object.
+        X_train (`ndarray`): Training data matrix.
+        X_test (`ndarray`): Testing data matrix.
+        y_train (`ndarray`): The classification target for training.
+        y_test (`ndarray`): The classification target for testing.
+        nrows (`int`, optional): Log first `nrows` rows of test predictions and prediction probabilities.
+        log_charts (`bool`, optional): Whether to calculate and log chart visualizations.
+            Note: Calculating visualizations is potentially expensive depending on input data and classifier, and
+            may take some time to finish. This is equivalent to calling the following functions from this module:
+            `log_classification_report_chart()`, `log_confusion_matrix_chart()`, `log_roc_auc_chart()`,
+            `log_precision_recall_chart()`, and `log_class_prediction_error_chart()`.
 
     Returns:
-        ``dict`` with all summary items.
+        `dict` with all summary items.
 
-    Examples:
-        Log random forest classifier summary.
+    Example:
+        import neptune
+        import neptune.integrations.sklearn as npt_utils
 
-        .. code:: python3
+        rfc = RandomForestClassifier()
+        rfc.fit(X_train, y_train)
 
-            import neptune.new.integrations.sklearn as npt_utils
-
-            rfc = RandomForestClassifier()
-            rfc.fit(X_train, y_train)
-
-            run = neptune.init_run(project='my_workspace/my_project')
-            run['random_forest/summary'] = npt_utils.create_classifier_summary(rfc, X_train, X_test, y_train, y_test)
+        run = neptune.init_run()
+        run["random_forest/summary"] = npt_utils.create_classifier_summary(rfc, X_train, X_test, y_train, y_test)
     """
     assert is_classifier(classifier), "classifier should be sklearn classifier."
 
@@ -253,45 +213,33 @@ def create_classifier_summary(classifier, X_train, X_test, y_train, y_test, nrow
 
 
 def create_kmeans_summary(model, X, nrows=1000, **kwargs):
-    """Create sklearn kmeans summary.
+    """Creates scikit-learn k-means summary.
 
-    This method fit KMeans model to data and logs:
+    Fits KMeans model to data and logs:
 
-    * all kmeans parameters,
-    * pickled estimator (model),
-    * cluster labels,
-    * clustering visualizations: KMeans elbow chart and silhouette coefficients chart.
-
-    Returned ``dict`` can be assigned to the run's namespace defined by the user (see example below).
-
-    Tip:
-        Check Sklearn-Neptune integration
-        `documentation <https://docs-beta.neptune.ai/essentials/integrations/machine-learning-frameworks/sklearn>`_
-        for the full example.
+    - all KMeans parameters,
+    - pickled estimator (model),
+    - cluster labels,
+    - clustering visualizations: KMeans elbow chart and silhouette coefficients chart.
 
     Args:
-        model (:obj:`KMeans`):
-            | KMeans object.
-        X (:obj:`ndarray`):
-            | Training instances to cluster.
-        nrows (`int`, optional, default is 1000):
-            | Number of rows to log in the cluster labels.
-        kwargs:
-            KMeans parameters.
+        model (`KMeans`): KMeans object.
+        X (`ndarray`): Training instances to cluster.
+        nrows (`int`, optional): Number of rows to log in the cluster labels.
+        kwargs: KMeans parameters.
 
     Returns:
-        ``dict`` with all summary items.
+        `dict` with all summary items.
 
-    Examples:
-        .. code:: python3
+    Example:
+        import neptune
+        import neptune.integrations.sklearn as npt_utils
 
-            import neptune.new.integrations.sklearn as npt_utils
+        km = KMeans(n_init=11, max_iter=270)
+        X, y = make_blobs(n_samples=579, n_features=17, centers=7, random_state=28743)
 
-            km = KMeans(n_init=11, max_iter=270)
-            X, y = make_blobs(n_samples=579, n_features=17, centers=7, random_state=28743)
-
-            run = neptune.init_run(project='my_workspace/my_project')
-            run['kmeans/summary'] = npt_utils.create_kmeans_summary(km, X)
+        run = neptune.init_run()
+        run["kmeans/summary"] = npt_utils.create_kmeans_summary(km, X)
     """
     assert isinstance(model, KMeans), "model should be sklearn KMeans instance"
 
@@ -312,29 +260,22 @@ def create_kmeans_summary(model, X, nrows=1000, **kwargs):
 
 
 def get_estimator_params(estimator):
-    """Get estimator parameters.
-
-    Tip:
-        Check Sklearn-Neptune integration
-        `documentation <https://docs-beta.neptune.ai/essentials/integrations/machine-learning-frameworks/sklearn>`_
-        for the full example.
+    """Returns estimator parameters.
 
     Args:
-        estimator (:obj:`estimator`):
-            | Scikit-learn estimator from which to log parameters.
+        estimator (`estimator`): Scikit-learn estimator from which to log parameters.
 
     Returns:
-        ``dict`` with all parameters mapped to their values.
+        `dict` with all parameters mapped to their values.
 
-    Examples:
-        .. code:: python3
+    Example:
+        import neptune
+        import neptune.integrations.sklearn as npt_utils
 
-            import neptune.new.integrations.sklearn as npt_utils
+        rfr = RandomForestRegressor()
 
-            rfr = RandomForestRegressor()
-
-            run = neptune.init_run(project='my_workspace/my_project')
-            run['estimator/params'] = npt_utils.get_estimator_params(rfr)
+        run = neptune.init_run()
+        run["estimator/params"] = npt_utils.get_estimator_params(rfr)
     """
     assert isinstance(estimator, BaseEstimator), "Estimator should be a sklearn estimator."
 
@@ -342,29 +283,22 @@ def get_estimator_params(estimator):
 
 
 def get_pickled_model(estimator):
-    """Get pickled estimator.
-
-    Tip:
-        Check Sklearn-Neptune integration
-        `documentation <https://docs-beta.neptune.ai/essentials/integrations/machine-learning-frameworks/sklearn>`_
-        for the full example.
+    """Returns pickled estimator.
 
     Args:
-        estimator (:obj:`estimator`):
-            | Scikit-learn estimator to pickle.
+        estimator (`estimator`): Scikit-learn estimator to pickle.
 
     Returns:
-        ``neptune.types.File`` object that you can assign to run's ``base_namespace``.
+        `neptune.types.File` object that you can log to the run.
 
-    Examples:
-        .. code:: python3
+    Example:
+        import neptune
+        import neptune.integrations.sklearn as npt_utils
 
-            import neptune.new.integrations.sklearn as npt_utils
+        rfr = RandomForestRegressor()
 
-            rfr = RandomForestRegressor()
-
-            run = neptune.init_run(project='my_workspace/my_project')
-            run['estimator/pickled_model'] = npt_utils.get_pickled_model(rfr)
+        run = neptune.init_run()
+        run["estimator/pickled_model"] = npt_utils.get_pickled_model(rfr)
     """
     assert (
         is_regressor(estimator) or is_classifier(estimator) or isinstance(estimator, KMeans)
@@ -374,41 +308,29 @@ def get_pickled_model(estimator):
 
 
 def get_test_preds(estimator, X_test, y_test, y_pred=None, nrows=1000):
-    """Get test predictions.
+    """Returns test predictions.
 
-    If you pass ``y_pred``, then predictions are not computed from ``X_test`` data.
-
-    Estimator should be fitted before calling this function.
-
-    Tip:
-        Check Sklearn-Neptune integration
-        `documentation <https://docs-beta.neptune.ai/essentials/integrations/machine-learning-frameworks/sklearn>`_
-        for the full example.
+    The estimator should be fitted before calling this function.
 
     Args:
-        estimator (:obj:`estimator`):
-            | Scikit-learn estimator to compute predictions.
-        X_test (:obj:`ndarray`):
-            | Testing data matrix.
-        y_test (:obj:`ndarray`):
-            | Target for testing.
-        y_pred (:obj:`ndarray`, optional, default is ``None``):
-            | Estimator predictions on test data.
-        nrows (`int`, optional, default is 1000):
-            | Number of rows to log.
+        estimator (`estimator`): Scikit-learn estimator to compute predictions.
+        X_test (`ndarray`): Testing data matrix.
+        y_test (`ndarray`): Target for testing.
+        y_pred (`ndarray`, optional): Estimator predictions on test data.
+            If you pass y_pred, then predictions are not computed from X_test data.
+        nrows (`int`, optional): Number of rows to log.
 
     Returns:
-        ``neptune.types.File`` object that you can assign to run's ``base_namespace``.
+        `neptune.types.File` object that you can log to the run.
 
-    Examples:
-        .. code:: python3
+    Example:
+        import neptune
+        import neptune.integrations.sklearn as npt_utils
 
-            import neptune.new.integrations.sklearn as npt_utils
+        rfr = RandomForestRegressor()
 
-            rfr = RandomForestRegressor()
-
-            run = neptune.init_run(project='my_workspace/my_project')
-            run['estimator/pickled_model'] = npt_utils.compute_test_preds(rfr, X_test, y_test)
+        run = neptune.init_run()
+        run["estimator/pickled_model"] = npt_utils.compute_test_preds(rfr, X_test, y_test)
     """
     assert is_regressor(estimator) or is_classifier(estimator), "Estimator should be sklearn regressor or classifier."
     assert isinstance(nrows, int), "nrows should be integer, {} was passed".format(type(nrows))
@@ -436,42 +358,30 @@ def get_test_preds(estimator, X_test, y_test, y_pred=None, nrows=1000):
 
 
 def get_test_preds_proba(classifier, X_test=None, y_pred_proba=None, nrows=1000):
-    """Get test predictions probabilities.
+    """Returns probabilities of test predictions.
 
-    If you pass ``X_test``, then predictions probabilities are computed from data.
-
-    If you pass ``y_pred_proba``, then predictions probabilities are not computed from ``X_test`` data.
-
-    Estimator should be fitted before calling this function.
-
-    Tip:
-        Check Sklearn-Neptune integration
-        `documentation <https://docs-beta.neptune.ai/essentials/integrations/machine-learning-frameworks/sklearn>`_
-        for the full example.
+    The estimator should be fitted before calling this function.
 
     Args:
-        classifier (:obj:`classifier`):
-            | Scikit-learn classifier to compute predictions probabilities.
-        X_test (:obj:`ndarray`):
-            | Testing data matrix.
-        y_pred_proba (:obj:`ndarray`, optional, default is ``None``):
-            | Classifier predictions probabilities on test data.
-        nrows (`int`, optional, default is 1000):
-            | Number of rows to log.
+        classifier (`classifier`): Scikit-learn classifier to compute prediction probabilities.
+        X_test (`ndarray`): Testing data matrix.
+            If you pass this argument, then probabilities are computed from those data.
+        y_pred_proba (`ndarray`, optional): Classifier predictions probabilities on test data.
+            If you pass this argument, then probabilities are not computed from X_test data.
+        nrows (`int`, optional): Number of rows to log.
 
     Returns:
-        ``neptune.types.File`` object that you can assign to run's ``base_namespace``.
+        `neptune.types.File` object that you can log to the run.
 
-    Examples:
-        .. code:: python3
+    Example:
+        import neptune
+        import neptune.integrations.sklearn as npt_utils
 
-            import neptune.new.integrations.sklearn as npt_utils
+        rfc = RandomForestClassifier()
+        rfc.fit(X_train, y_train)
 
-            rfc = RandomForestClassifier()
-            rfc.fit(X_train, y_train)
-
-            run = neptune.init_run(project='my_workspace/my_project')
-            run['estimator/pickled_model'] = npt_utils.compute_test_preds(rfc, X_test)
+        run = neptune.init_run()
+        run["estimator/pickled_model"] = npt_utils.compute_test_preds(rfc, X_test)
     """
     assert is_classifier(classifier), "Classifier should be sklearn classifier."
     assert isinstance(nrows, int), "nrows should be integer, {} was passed".format(type(nrows))
@@ -495,62 +405,52 @@ def get_test_preds_proba(classifier, X_test=None, y_pred_proba=None, nrows=1000)
 
 
 def get_scores(estimator, X, y, y_pred=None):
-    """Get estimator scores on ``X``.
+    """Returns estimator scores on X.
 
-    If you pass ``y_pred``, then predictions are not computed from ``X`` and ``y`` data.
+    If you pass y_pred, then predictions are not computed from X and y data.
 
-    Estimator should be fitted before calling this function.
+    The estimator should be fitted before calling this function.
 
     **Regressor**
 
-    For regressors that outputs single value, following scores are logged:
+    For regressors that output a single value, the following scores are logged:
 
-    * explained variance
-    * max error
-    * mean absolute error
-    * r2
+    - explained variance
+    - max error
+    - mean absolute error
+    - r2
 
     For multi-output regressor:
 
-    * r2
+    - r2
 
     **Classifier**
 
-    For classifier, following scores are logged:
+    For a classifier, the following scores are logged:
 
-    * precision
-    * recall
-    * f beta score
-    * support
-
-    Tip:
-        Check Sklearn-Neptune integration
-        `documentation <https://docs-beta.neptune.ai/essentials/integrations/machine-learning-frameworks/sklearn>`_
-        for the full example.
+    - precision
+    - recall
+    - f beta score
+    - support
 
     Args:
-        estimator (:obj:`estimator`):
-            | Scikit-learn estimator to compute scores.
-        X (:obj:`ndarray`):
-            | Data matrix.
-        y (:obj:`ndarray`):
-            | Target for testing.
-        y_pred (:obj:`ndarray`, optional, default is ``None``):
-            | Estimator predictions on data.
+        estimator (`estimator`): Scikit-learn estimator to compute scores.
+        X (`ndarray`): Data matrix.
+        y (`ndarray`): Target for testing.
+        y_pred (`ndarray`, optional): Estimator predictions on data.
 
     Returns:
-        ``dict`` with scores.
+        `dict` with scores that you can log to the run.
 
-    Examples:
-        .. code:: python3
+    Example:
+        import neptune
+        import neptune.integrations.sklearn as npt_utils
 
-            import neptune.new.integrations.sklearn as npt_utils
+        rfc = RandomForestClassifier()
+        rfc.fit(X_train, y_train)
 
-            rfc = RandomForestClassifier()
-            rfc.fit(X_train, y_train)
-
-            run = neptune.init_run(project='my_workspace/my_project')
-            run['estimator/scores'] = npt_utils.get_scores(rfc, X, y)
+        run = neptune.init_run()
+        run["estimator/scores"] = npt_utils.get_scores(rfc, X, y)
     """
     assert is_regressor(estimator) or is_classifier(estimator), "Estimator should be sklearn regressor or classifier."
 
@@ -590,34 +490,25 @@ def get_scores(estimator, X, y, y_pred=None):
 
 
 def create_learning_curve_chart(regressor, X_train, y_train):
-    """Create learning curve chart.
-
-    Tip:
-        Check Sklearn-Neptune integration
-        `documentation <https://docs-beta.neptune.ai/essentials/integrations/machine-learning-frameworks/sklearn>`_
-        for the full example.
+    """Creates learning curve chart.
 
     Args:
-        regressor (:obj:`regressor`):
-            | Fitted sklearn regressor object
-        X_train (:obj:`ndarray`):
-            | Training data matrix
-        y_train (:obj:`ndarray`):
-            | The regression target for training
+        regressor (`regressor`): Fitted scikit-learn regressor object.
+        X_train (`ndarray`): Training data matrix.
+        y_train (`ndarray`): The regression target for training.
 
     Returns:
-        ``neptune.types.File`` object that you can assign to run's ``base_namespace``.
+        `neptune.types.File` object that you can log to the run.
 
-    Examples:
-        .. code:: python3
+    Example:
+        import neptune
+        import neptune.new.integrations.sklearn as npt_utils
 
-            import neptune.new.integrations.sklearn as npt_utils
+        rfr = RandomForestRegressor()
+        rfr.fit(X_train, y_train)
 
-            rfr = RandomForestRegressor()
-            rfr.fit(X_train, y_train)
-
-            run = neptune.init_run(project='my_workspace/my_project')
-            run['visuals/learning_curve'] = npt_utils.create_learning_curve_chart(rfr, X_train, y_train)
+        run = neptune.init_run()
+        run["visuals/learning_curve"] = npt_utils.create_learning_curve_chart(rfr, X_train, y_train)
     """
     assert is_regressor(regressor), "regressor should be sklearn regressor."
 
@@ -636,34 +527,25 @@ def create_learning_curve_chart(regressor, X_train, y_train):
 
 
 def create_feature_importance_chart(regressor, X_train, y_train):
-    """Create feature importance chart.
-
-    Tip:
-        Check Sklearn-Neptune integration
-        `documentation <https://docs-beta.neptune.ai/essentials/integrations/machine-learning-frameworks/sklearn>`_
-        for the full example.
+    """Creates feature importance chart.
 
     Args:
-        regressor (:obj:`regressor`):
-            | Fitted sklearn regressor object
-        X_train (:obj:`ndarray`):
-            | Training data matrix
-        y_train (:obj:`ndarray`):
-            | The regression target for training
+        regressor (`regressor`): Fitted scikit-learn regressor object.
+        X_train (`ndarray`): Training data matrix.
+        y_train (`ndarray`): The regression target for training.
 
     Returns:
-        ``neptune.types.File`` object that you can assign to run's ``base_namespace``.
+        `neptune.types.File` object that you can log to the run.
 
-    Examples:
-        .. code:: python3
+    Example:
+        import neptune
+        import neptune.integrations.sklearn as npt_utils
 
-            import neptune.new.integrations.sklearn as npt_utils
+        rfr = RandomForestRegressor()
+        rfr.fit(X_train, y_train)
 
-            rfr = RandomForestRegressor()
-            rfr.fit(X_train, y_train)
-
-            run = neptune.init_run(project='my_workspace/my_project')
-            run['visuals/feature_importance'] = npt_utils.create_feature_importance_chart(rfr, X_train, y_train)
+        run = neptune.init_run()
+        run["visuals/feature_importance"] = npt_utils.create_feature_importance_chart(rfr, X_train, y_train)
     """
     assert is_regressor(regressor), "regressor should be sklearn regressor."
 
@@ -684,38 +566,27 @@ def create_feature_importance_chart(regressor, X_train, y_train):
 
 
 def create_residuals_chart(regressor, X_train, X_test, y_train, y_test):
-    """Create residuals chart.
-
-    Tip:
-        Check Sklearn-Neptune integration
-        `documentation <https://docs-beta.neptune.ai/essentials/integrations/machine-learning-frameworks/sklearn>`_
-        for the full example.
+    """Creates residuals chart.
 
     Args:
-        regressor (:obj:`regressor`):
-            | Fitted sklearn regressor object
-        X_train (:obj:`ndarray`):
-            | Training data matrix
-        X_test (:obj:`ndarray`):
-            | Testing data matrix
-        y_train (:obj:`ndarray`):
-            | The regression target for training
-        y_test (:obj:`ndarray`):
-            | The regression target for testing
+        regressor (`regressor`): Fitted scikit-learn regressor object.
+        X_train (`ndarray`): Training data matrix.
+        X_test (`ndarray`): Testing data matrix.
+        y_train (`ndarray`): The regression target for training.
+        y_test (`ndarray`): The regression target for testing.
 
     Returns:
-        ``neptune.types.File`` object that you can assign to run's ``base_namespace``.
+        `neptune.types.File` object that you can log to the run.
 
-    Examples:
-        .. code:: python3
+    Example:
+        import neptune
+        import neptune.new.integrations.sklearn as npt_utils
 
-            import neptune.new.integrations.sklearn as npt_utils
+        rfr = RandomForestRegressor()
+        rfr.fit(X_train, y_train)
 
-            rfr = RandomForestRegressor()
-            rfr.fit(X_train, y_train)
-
-            run = neptune.init_run(project='my_workspace/my_project')
-            run['visuals/residuals'] = npt_utils.create_residuals_chart(rfr, X_train, X_test, y_train, y_test)
+        run = neptune.init_run()
+        run["visuals/residuals"] = npt_utils.create_residuals_chart(rfr, X_train, X_test, y_train, y_test)
     """
     assert is_regressor(regressor), "regressor should be sklearn regressor."
 
@@ -736,38 +607,27 @@ def create_residuals_chart(regressor, X_train, X_test, y_train, y_test):
 
 
 def create_prediction_error_chart(regressor, X_train, X_test, y_train, y_test):
-    """Create prediction error chart.
-
-    Tip:
-        Check Sklearn-Neptune integration
-        `documentation <https://docs-beta.neptune.ai/essentials/integrations/machine-learning-frameworks/sklearn>`_
-        for the full example.
+    """Creates prediction error chart.
 
     Args:
-        regressor (:obj:`regressor`):
-            | Fitted sklearn regressor object
-        X_train (:obj:`ndarray`):
-            | Training data matrix
-        X_test (:obj:`ndarray`):
-            | Testing data matrix
-        y_train (:obj:`ndarray`):
-            | The regression target for training
-        y_test (:obj:`ndarray`):
-            | The regression target for testing
+        regressor (`regressor`): Fitted sklearn regressor object.
+        X_train (`ndarray`): Training data matrix.
+        X_test (`ndarray`): Testing data matrix.
+        y_train (`ndarray`): The regression target for training.
+        y_test (`ndarray`): The regression target for testing.
 
     Returns:
-        ``neptune.types.File`` object that you can assign to run's ``base_namespace``.
+        `neptune.types.File` object that you can log to the run.
 
-    Examples:
-        .. code:: python3
+    Example:
+        import neptune
+        import neptune.new.integrations.sklearn as npt_utils
 
-            import neptune.new.integrations.sklearn as npt_utils
+        rfr = RandomForestRegressor()
+        rfr.fit(X_train, y_train)
 
-            rfr = RandomForestRegressor()
-            rfr.fit(X_train, y_train)
-
-            run = neptune.init_run(project='my_workspace/my_project')
-            run['prediction_error'] = npt_utils.create_prediction_error_chart(rfr, X_train, X_test, y_train, y_test)
+        run = neptune.init_run()
+        run["prediction_error"] = npt_utils.create_prediction_error_chart(rfr, X_train, X_test, y_train, y_test)
     """
     assert is_regressor(regressor), "regressor should be sklearn regressor."
 
@@ -788,34 +648,25 @@ def create_prediction_error_chart(regressor, X_train, X_test, y_train, y_test):
 
 
 def create_cooks_distance_chart(regressor, X_train, y_train):
-    """Create cooks distance chart.
-
-    Tip:
-        Check Sklearn-Neptune integration
-        `documentation <https://docs-beta.neptune.ai/essentials/integrations/machine-learning-frameworks/sklearn>`_
-        for the full example.
+    """Creates cooks distance chart.
 
     Args:
-        regressor (:obj:`regressor`):
-            | Fitted sklearn regressor object
-        X_train (:obj:`ndarray`):
-            | Training data matrix
-        y_train (:obj:`ndarray`):
-            | The regression target for training
+        regressor (`regressor`): Fitted sklearn regressor object
+        X_train (`ndarray`): Training data matrix
+        y_train (`ndarray`): The regression target for training
 
     Returns:
-        ``neptune.types.File`` object that you can assign to run's ``base_namespace``.
+        `neptune.types.File` object that you can log to the run.
 
-    Examples:
-        .. code:: python3
+    Example:
+        import neptune
+        import neptune.integrations.sklearn as npt_utils
 
-            import neptune.new.integrations.sklearn as npt_utils
+        rfr = RandomForestRegressor()
+        rfr.fit(X_train, y_train)
 
-            rfr = RandomForestRegressor()
-            rfr.fit(X_train, y_train)
-
-            run = neptune.init_run(project='my_workspace/my_project')
-            run['visuals/cooks_distance'] = npt_utils.create_cooks_distance_chart(rfr, X_train, y_train)
+        run = neptune.init_run()
+        run["visuals/cooks_distance"] = npt_utils.create_cooks_distance_chart(rfr, X_train, y_train)
     """
     assert is_regressor(regressor), "regressor should be sklearn regressor."
 
@@ -835,37 +686,26 @@ def create_cooks_distance_chart(regressor, X_train, y_train):
 
 
 def create_classification_report_chart(classifier, X_train, X_test, y_train, y_test):
-    """Create classification report chart.
-
-    Tip:
-        Check Sklearn-Neptune integration
-        `documentation <https://docs-beta.neptune.ai/essentials/integrations/machine-learning-frameworks/sklearn>`_
-        for the full example.
+    """Creates classification report chart.
 
     Args:
-        classifier (:obj:`classifier`):
-            | Fitted sklearn classifier object
-        X_train (:obj:`ndarray`):
-            | Training data matrix
-        X_test (:obj:`ndarray`):
-            | Testing data matrix
-        y_train (:obj:`ndarray`):
-            | The classification target for training
-        y_test (:obj:`ndarray`):
-            | The classification target for testing
+        classifier (`classifier`): Fitted sklearn classifier object.
+        X_train (`ndarray`): Training data matrix.
+        X_test (`ndarray`): Testing data matrix.
+        y_train (`ndarray`): The classification target for training.
+        y_test (`ndarray`): The classification target for testing.
 
     Returns:
-        ``neptune.types.File`` object that you can assign to run's ``base_namespace``.
+        `neptune.types.File` object that you can log to the run.
 
-    Examples:
-        .. code:: python3
-
+    Example:
+        import neptune
             import neptune.new.integrations.sklearn as npt_utils
 
             rfc = RandomForestClassifier()
             rfc.fit(X_train, y_train)
 
-            run = neptune.init_run(project='my_workspace/my_project')
+            run = neptune.init_run()
             run['visuals/classification_report'] = \
                 npt_utils.create_classification_report_chart(rfc, X_train, X_test, y_train, y_test)
     """
@@ -888,39 +728,29 @@ def create_classification_report_chart(classifier, X_train, X_test, y_train, y_t
 
 
 def create_confusion_matrix_chart(classifier, X_train, X_test, y_train, y_test):
-    """Create confusion matrix.
-
-    Tip:
-        Check Sklearn-Neptune integration
-        `documentation <https://docs-beta.neptune.ai/essentials/integrations/machine-learning-frameworks/sklearn>`_
-        for the full example.
+    """Creates confusion matrix.
 
     Args:
-        classifier (:obj:`classifier`):
-            | Fitted sklearn classifier object
-        X_train (:obj:`ndarray`):
-            | Training data matrix
-        X_test (:obj:`ndarray`):
-            | Testing data matrix
-        y_train (:obj:`ndarray`):
-            | The classification target for training
-        y_test (:obj:`ndarray`):
-            | The classification target for testing
+        classifier (`classifier`): Fitted scikit-learn classifier object.
+        X_train (`ndarray`): Training data matrix.
+        X_test (`ndarray`): Testing data matrix.
+        y_train (`ndarray`): The classification target for training.
+        y_test (`ndarray`): The classification target for testing.
 
     Returns:
-        ``neptune.types.File`` object that you can assign to run's ``base_namespace``.
+        `neptune.types.File` object that you can log to the run.
 
-    Examples:
-        .. code:: python3
+    Example:
+        import neptune
+        import neptune.integrations.sklearn as npt_utils
 
-            import neptune.new.integrations.sklearn as npt_utils
+        rfc = RandomForestClassifier()
+        rfc.fit(X_train, y_train)
 
-            rfc = RandomForestClassifier()
-            rfc.fit(X_train, y_train)
-
-            run = neptune.init_run(project='my_workspace/my_project')
-            run['visuals/confusion_matrix'] = \
-                npt_utils.create_confusion_matrix_chart(rfc, X_train, X_test, y_train, y_test)
+        run = neptune.init_run()
+        run["visuals/confusion_matrix"] = npt_utils.create_confusion_matrix_chart(
+            rfc, X_train, X_test, y_train, y_test
+        )
     """
     assert is_classifier(classifier), "classifier should be sklearn classifier."
 
@@ -941,38 +771,27 @@ def create_confusion_matrix_chart(classifier, X_train, X_test, y_train, y_test):
 
 
 def create_roc_auc_chart(classifier, X_train, X_test, y_train, y_test):
-    """Create ROC-AUC chart.
-
-    Tip:
-        Check Sklearn-Neptune integration
-        `documentation <https://docs-beta.neptune.ai/essentials/integrations/machine-learning-frameworks/sklearn>`_
-        for the full example.
+    """Creates ROC-AUC chart.
 
     Args:
-        classifier (:obj:`classifier`):
-            | Fitted sklearn classifier object
-        X_train (:obj:`ndarray`):
-            | Training data matrix
-        X_test (:obj:`ndarray`):
-            | Testing data matrix
-        y_train (:obj:`ndarray`):
-            | The classification target for training
-        y_test (:obj:`ndarray`):
-            | The classification target for testing
+        classifier (`classifier`): Fitted scikit-learn classifier object.
+        X_train (`ndarray`): Training data matrix.
+        X_test (`ndarray`): Testing data matrix.
+        y_train (`ndarray`): The classification target for training.
+        y_test (`ndarray`): The classification target for testing.
 
     Returns:
-        ``neptune.types.File`` object that you can assign to run's ``base_namespace``.
+        `neptune.types.File` object that you can log to the run.
 
-    Examples:
-        .. code:: python3
+    Example:
+        import neptune
+        import neptune.integrations.sklearn as npt_utils
 
-            import neptune.new.integrations.sklearn as npt_utils
+        rfc = RandomForestClassifier()
+        rfc.fit(X_train, y_train)
 
-            rfc = RandomForestClassifier()
-            rfc.fit(X_train, y_train)
-
-            run = neptune.init_run(project='my_workspace/my_project')
-            run['visuals/roc_auc'] = npt_utils.create_roc_auc_chart(rfc, X_train, X_test, y_train, y_test)
+        run = neptune.init_run()
+        run["visuals/roc_auc"] = npt_utils.create_roc_auc_chart(rfc, X_train, X_test, y_train, y_test)
     """
     assert is_classifier(classifier), "classifier should be sklearn classifier."
 
@@ -993,36 +812,26 @@ def create_roc_auc_chart(classifier, X_train, X_test, y_train, y_test):
 
 
 def create_precision_recall_chart(classifier, X_test, y_test, y_pred_proba=None):
-    """Create precision recall chart.
-
-    Tip:
-        Check Sklearn-Neptune integration
-        `documentation <https://docs-beta.neptune.ai/essentials/integrations/machine-learning-frameworks/sklearn>`_
-        for the full example.
+    """Creates precision-recall chart.
 
     Args:
-        classifier (:obj:`classifier`):
-            | Fitted sklearn classifier object
-        X_test (:obj:`ndarray`):
-            | Testing data matrix
-        y_test (:obj:`ndarray`):
-            | The classification target for testing
-        y_pred_proba (:obj:`ndarray`, optional, default is ``None``):
-            | Classifier predictions probabilities on test data.
+        classifier (`classifier`): Fitted scikit-learn classifier object.
+        X_test (`ndarray`): Testing data matrix.
+        y_test (`ndarray`): The classification target for testing.
+        y_pred_proba (`ndarray`, optional): Classifier predictions probabilities on test data.
 
     Returns:
-        ``neptune.types.File`` object that you can assign to run's ``base_namespace``.
+        `neptune.types.File` object that you can log to the run.
 
-    Examples:
-        .. code:: python3
+    Example:
+        import neptune
+        import neptune.integrations.sklearn as npt_utils
 
-            import neptune.new.integrations.sklearn as npt_utils
+        rfc = RandomForestClassifier()
+        rfc.fit(X_train, y_train)
 
-            rfc = RandomForestClassifier()
-            rfc.fit(X_train, y_train)
-
-            run = neptune.init_run(project='my_workspace/my_project')
-            run['visuals/precision_recall'] = npt_utils.create_precision_recall_chart(rfc, X_test, y_test)
+        run = neptune.init_run()
+        run["visuals/precision_recall"] = npt_utils.create_precision_recall_chart(rfc, X_test, y_test)
     """
     assert is_classifier(classifier), "classifier should be sklearn classifier."
 
@@ -1050,39 +859,29 @@ def create_precision_recall_chart(classifier, X_test, y_test, y_pred_proba=None)
 
 
 def create_class_prediction_error_chart(classifier, X_train, X_test, y_train, y_test):
-    """Create class prediction error chart.
-
-    Tip:
-        Check Sklearn-Neptune integration
-        `documentation <https://docs-beta.neptune.ai/essentials/integrations/machine-learning-frameworks/sklearn>`_
-        for the full example.
+    """Creates class prediction error chart.
 
     Args:
-        classifier (:obj:`classifier`):
-            | Fitted sklearn classifier object
-        X_train (:obj:`ndarray`):
-            | Training data matrix
-        X_test (:obj:`ndarray`):
-            | Testing data matrix
-        y_train (:obj:`ndarray`):
-            | The classification target for training
-        y_test (:obj:`ndarray`):
-            | The classification target for testing
+        classifier (`classifier`): Fitted scikit-learn classifier object.
+        X_train (`ndarray`): Training data matrix.
+        X_test (`ndarray`): Testing data matrix.
+        y_train (`ndarray`): The classification target for training.
+        y_test (`ndarray`): The classification target for testing.
 
     Returns:
-        ``neptune.types.File`` object that you can assign to run's ``base_namespace``.
+        `neptune.types.File` object that you can log to the run.
 
-    Examples:
-        .. code:: python3
+    Example:
+        import neptune
+        import neptune.integrations.sklearn as npt_utils
 
-            import neptune.new.integrations.sklearn as npt_utils
+        rfc = RandomForestClassifier()
+        rfc.fit(X_train, y_train)
 
-            rfc = RandomForestClassifier()
-            rfc.fit(X_train, y_train)
-
-            run = neptune.init_run(project='my_workspace/my_project')
-            run['visuals/class_prediction_error'] = \
-                npt_utils.create_class_prediction_error_chart(rfc, X_train, X_test, y_train, y_test)
+        run = neptune.init_run()
+        run["visuals/class_prediction_error"] = npt_utils.create_class_prediction_error_chart(
+            rfc, X_train, X_test, y_train, y_test
+        )
     """
     assert is_classifier(classifier), "classifier should be sklearn classifier."
 
@@ -1103,36 +902,26 @@ def create_class_prediction_error_chart(classifier, X_train, X_test, y_train, y_
 
 
 def get_cluster_labels(model, X, nrows=1000, **kwargs):
-    """Log index of the cluster label each sample belongs to.
-
-    Tip:
-        Check Sklearn-Neptune integration
-        `documentation <https://docs-beta.neptune.ai/essentials/integrations/machine-learning-frameworks/sklearn>`_
-        for the full example.
+    """Logs the index of the cluster label each sample belongs to.
 
     Args:
-        model (:obj:`KMeans`):
-            | KMeans object.
-        X (:obj:`ndarray`):
-            | Training instances to cluster.
-        nrows (`int`, optional, default is 1000):
-            | Number of rows to log.
-        kwargs:
-            KMeans parameters.
+        model (`KMeans`): KMeans object.
+        X (`ndarray`): Training instances to cluster.
+        nrows (`int`, optional): Number of rows to log.
+        kwargs: KMeans parameters.
 
     Returns:
-        ``neptune.types.File`` object that you can assign to run's ``base_namespace``.
+        `neptune.types.File` object that you can log to the run.
 
-    Examples:
-        .. code:: python3
+    Example:
+        import neptune
+        import neptune.integrations.sklearn as npt_utils
 
-            import neptune.new.integrations.sklearn as npt_utils
+        km = KMeans(n_init=11, max_iter=270)
+        X, y = make_blobs(n_samples=579, n_features=17, centers=7, random_state=28743)
 
-            km = KMeans(n_init=11, max_iter=270)
-            X, y = make_blobs(n_samples=579, n_features=17, centers=7, random_state=28743)
-
-            run = neptune.init_run(project='my_workspace/my_project')
-            run['kmeans/cluster_labels'] = npt_utils.get_cluster_labels(km, X)
+        run = neptune.init_run()
+        run["kmeans/cluster_labels"] = npt_utils.get_cluster_labels(km, X)
     """
     assert isinstance(model, KMeans), "Model should be sklearn KMeans instance."
     assert isinstance(nrows, int), "nrows should be integer, {} was passed".format(type(nrows))
@@ -1146,34 +935,25 @@ def get_cluster_labels(model, X, nrows=1000, **kwargs):
 
 
 def create_kelbow_chart(model, X, **kwargs):
-    """Create K-elbow chart for KMeans clusterer.
-
-    Tip:
-        Check Sklearn-Neptune integration
-        `documentation <https://docs-beta.neptune.ai/essentials/integrations/machine-learning-frameworks/sklearn>`_
-        for the full example.
+    """Creates K-elbow chart for KMeans clusterer.
 
     Args:
-        model (:obj:`KMeans`):
-            | KMeans object.
-        X (:obj:`ndarray`):
-            | Training instances to cluster.
-        kwargs:
-            KMeans parameters.
+        model (`KMeans`): KMeans object.
+        X (`ndarray`): Training instances to cluster.
+        kwargs: KMeans parameters.
 
     Returns:
-        ``neptune.types.File`` object that you can assign to run's ``base_namespace``.
+        `neptune.types.File` object that you can log to the run.
 
-    Examples:
-        .. code:: python3
+    Example:
+        import neptune
+        import neptune.integrations.sklearn as npt_utils
 
-            import neptune.new.integrations.sklearn as npt_utils
+        km = KMeans(n_init=11, max_iter=270)
+        X, y = make_blobs(n_samples=579, n_features=17, centers=7, random_state=28743)
 
-            km = KMeans(n_init=11, max_iter=270)
-            X, y = make_blobs(n_samples=579, n_features=17, centers=7, random_state=28743)
-
-            run = neptune.init_run(project='my_workspace/my_project')
-            run['kmeans/kelbow'] = npt_utils.create_kelbow_chart(km, X)
+        run = neptune.init_run()
+        run["kmeans/kelbow"] = npt_utils.create_kelbow_chart(km, X)
     """
     assert isinstance(model, KMeans), "Model should be sklearn KMeans instance."
 
@@ -1200,36 +980,27 @@ def create_kelbow_chart(model, X, **kwargs):
 
 
 def create_silhouette_chart(model, X, **kwargs):
-    """Create silhouette coefficients charts for KMeans clusterer.
+    """Creates silhouette coefficients charts for KMeans clusterer.
 
     Charts are computed for j = 2, 3, ..., n_clusters.
 
-    Tip:
-        Check Sklearn-Neptune integration
-        `documentation <https://docs-beta.neptune.ai/essentials/integrations/machine-learning-frameworks/sklearn>`_
-        for the full example.
-
     Args:
-        model (:obj:`KMeans`):
-            | KMeans object.
-        X (:obj:`ndarray`):
-            | Training instances to cluster.
-        kwargs:
-            KMeans parameters.
+        model (`KMeans`): KMeans object.
+        X (`ndarray`): Training instances to cluster.
+        kwargs: KMeans parameters.
 
     Returns:
-        ``neptune.types.FileSeries`` object that you can assign to run's ``base_namespace``.
+        `neptune.types.FileSeries` object that you can log to the run.
 
-    Examples:
-        .. code:: python3
+    Example:
+        import neptune
+        import neptune.integrations.sklearn as npt_utils
 
-            import neptune.new.integrations.sklearn as npt_utils
+        km = KMeans(n_init=11, max_iter=270)
+        X, y = make_blobs(n_samples=579, n_features=17, centers=7, random_state=28743)
 
-            km = KMeans(n_init=11, max_iter=270)
-            X, y = make_blobs(n_samples=579, n_features=17, centers=7, random_state=28743)
-
-            run = neptune.init_run(project='my_workspace/my_project')
-            run['kmeans/silhouette'] = npt_utils.create_silhouette_chart(km, X, n_clusters=12)
+        run = neptune.init_run()
+        run["kmeans/silhouette"] = npt_utils.create_silhouette_chart(km, X, n_clusters=12)
     """
     assert isinstance(model, KMeans), "Model should be sklearn KMeans instance."
 
