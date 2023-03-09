@@ -114,6 +114,10 @@ def create_regressor_summary(regressor, X_train, X_test, y_train, y_test, nrows=
 
         run = neptune.init_run()
         run["random_forest/summary"] = npt_utils.create_regressor_summary(rfr, X_train, X_test, y_train, y_test)
+
+    For more, see the docs:
+        Tutorial: https://docs.neptune.ai/integrations/sklearn/
+        API reference: https://docs.neptune.ai/api/integrations/sklearn/
     """
     assert is_regressor(regressor), "regressor should be sklearn regressor."
 
@@ -182,6 +186,10 @@ def create_classifier_summary(classifier, X_train, X_test, y_train, y_test, nrow
 
         run = neptune.init_run()
         run["random_forest/summary"] = npt_utils.create_classifier_summary(rfc, X_train, X_test, y_train, y_test)
+
+    For more, see the docs:
+        Tutorial: https://docs.neptune.ai/integrations/sklearn/
+        API reference: https://docs.neptune.ai/api/integrations/sklearn/
     """
     assert is_classifier(classifier), "classifier should be sklearn classifier."
 
@@ -240,6 +248,10 @@ def create_kmeans_summary(model, X, nrows=1000, **kwargs):
 
         run = neptune.init_run()
         run["kmeans/summary"] = npt_utils.create_kmeans_summary(km, X)
+
+    For more, see the docs:
+        Tutorial: https://docs.neptune.ai/integrations/sklearn/
+        API reference: https://docs.neptune.ai/api/integrations/sklearn/
     """
     assert isinstance(model, KMeans), "model should be sklearn KMeans instance"
 
@@ -276,6 +288,10 @@ def get_estimator_params(estimator):
 
         run = neptune.init_run()
         run["estimator/params"] = npt_utils.get_estimator_params(rfr)
+
+    For more, see the docs:
+        Tutorial: https://docs.neptune.ai/integrations/sklearn/
+        API reference: https://docs.neptune.ai/api/integrations/sklearn/
     """
     assert isinstance(estimator, BaseEstimator), "Estimator should be a sklearn estimator."
 
@@ -299,6 +315,10 @@ def get_pickled_model(estimator):
 
         run = neptune.init_run()
         run["estimator/pickled_model"] = npt_utils.get_pickled_model(rfr)
+
+    For more, see the docs:
+        Tutorial: https://docs.neptune.ai/integrations/sklearn/
+        API reference: https://docs.neptune.ai/api/integrations/sklearn/
     """
     assert (
         is_regressor(estimator) or is_classifier(estimator) or isinstance(estimator, KMeans)
@@ -331,6 +351,10 @@ def get_test_preds(estimator, X_test, y_test, y_pred=None, nrows=1000):
 
         run = neptune.init_run()
         run["estimator/pickled_model"] = npt_utils.compute_test_preds(rfr, X_test, y_test)
+
+    For more, see the docs:
+        Tutorial: https://docs.neptune.ai/integrations/sklearn/
+        API reference: https://docs.neptune.ai/api/integrations/sklearn/
     """
     assert is_regressor(estimator) or is_classifier(estimator), "Estimator should be sklearn regressor or classifier."
     assert isinstance(nrows, int), "nrows should be integer, {} was passed".format(type(nrows))
@@ -382,6 +406,10 @@ def get_test_preds_proba(classifier, X_test=None, y_pred_proba=None, nrows=1000)
 
         run = neptune.init_run()
         run["estimator/pickled_model"] = npt_utils.compute_test_preds(rfc, X_test)
+
+    For more, see the docs:
+        Tutorial: https://docs.neptune.ai/integrations/sklearn/
+        API reference: https://docs.neptune.ai/api/integrations/sklearn/
     """
     assert is_classifier(classifier), "Classifier should be sklearn classifier."
     assert isinstance(nrows, int), "nrows should be integer, {} was passed".format(type(nrows))
@@ -451,6 +479,10 @@ def get_scores(estimator, X, y, y_pred=None):
 
         run = neptune.init_run()
         run["estimator/scores"] = npt_utils.get_scores(rfc, X, y)
+
+    For more, see the docs:
+        Tutorial: https://docs.neptune.ai/integrations/sklearn/
+        API reference: https://docs.neptune.ai/api/integrations/sklearn/
     """
     assert is_regressor(estimator) or is_classifier(estimator), "Estimator should be sklearn regressor or classifier."
 
@@ -509,6 +541,10 @@ def create_learning_curve_chart(regressor, X_train, y_train):
 
         run = neptune.init_run()
         run["visuals/learning_curve"] = npt_utils.create_learning_curve_chart(rfr, X_train, y_train)
+
+    For more, see the docs:
+        Tutorial: https://docs.neptune.ai/integrations/sklearn/
+        API reference: https://docs.neptune.ai/api/integrations/sklearn/
     """
     assert is_regressor(regressor), "regressor should be sklearn regressor."
 
@@ -546,6 +582,10 @@ def create_feature_importance_chart(regressor, X_train, y_train):
 
         run = neptune.init_run()
         run["visuals/feature_importance"] = npt_utils.create_feature_importance_chart(rfr, X_train, y_train)
+
+    For more, see the docs:
+        Tutorial: https://docs.neptune.ai/integrations/sklearn/
+        API reference: https://docs.neptune.ai/api/integrations/sklearn/
     """
     assert is_regressor(regressor), "regressor should be sklearn regressor."
 
@@ -587,6 +627,10 @@ def create_residuals_chart(regressor, X_train, X_test, y_train, y_test):
 
         run = neptune.init_run()
         run["visuals/residuals"] = npt_utils.create_residuals_chart(rfr, X_train, X_test, y_train, y_test)
+
+    For more, see the docs:
+        Tutorial: https://docs.neptune.ai/integrations/sklearn/
+        API reference: https://docs.neptune.ai/api/integrations/sklearn/
     """
     assert is_regressor(regressor), "regressor should be sklearn regressor."
 
@@ -628,6 +672,10 @@ def create_prediction_error_chart(regressor, X_train, X_test, y_train, y_test):
 
         run = neptune.init_run()
         run["prediction_error"] = npt_utils.create_prediction_error_chart(rfr, X_train, X_test, y_train, y_test)
+
+    For more, see the docs:
+        Tutorial: https://docs.neptune.ai/integrations/sklearn/
+        API reference: https://docs.neptune.ai/api/integrations/sklearn/
     """
     assert is_regressor(regressor), "regressor should be sklearn regressor."
 
@@ -667,6 +715,10 @@ def create_cooks_distance_chart(regressor, X_train, y_train):
 
         run = neptune.init_run()
         run["visuals/cooks_distance"] = npt_utils.create_cooks_distance_chart(rfr, X_train, y_train)
+
+    For more, see the docs:
+        Tutorial: https://docs.neptune.ai/integrations/sklearn/
+        API reference: https://docs.neptune.ai/api/integrations/sklearn/
     """
     assert is_regressor(regressor), "regressor should be sklearn regressor."
 
@@ -700,14 +752,19 @@ def create_classification_report_chart(classifier, X_train, X_test, y_train, y_t
 
     Example:
         import neptune
-            import neptune.new.integrations.sklearn as npt_utils
+        import neptune.integrations.sklearn as npt_utils
 
-            rfc = RandomForestClassifier()
-            rfc.fit(X_train, y_train)
+        rfc = RandomForestClassifier()
+        rfc.fit(X_train, y_train)
 
-            run = neptune.init_run()
-            run['visuals/classification_report'] = \
-                npt_utils.create_classification_report_chart(rfc, X_train, X_test, y_train, y_test)
+        run = neptune.init_run()
+        run["visuals/classification_report"] = npt_utils.create_classification_report_chart(
+            rfc, X_train, X_test, y_train, y_test
+        )
+
+    For more, see the docs:
+        Tutorial: https://docs.neptune.ai/integrations/sklearn/
+        API reference: https://docs.neptune.ai/api/integrations/sklearn/
     """
     assert is_classifier(classifier), "classifier should be sklearn classifier."
 
@@ -751,6 +808,10 @@ def create_confusion_matrix_chart(classifier, X_train, X_test, y_train, y_test):
         run["visuals/confusion_matrix"] = npt_utils.create_confusion_matrix_chart(
             rfc, X_train, X_test, y_train, y_test
         )
+
+    For more, see the docs:
+        Tutorial: https://docs.neptune.ai/integrations/sklearn/
+        API reference: https://docs.neptune.ai/api/integrations/sklearn/
     """
     assert is_classifier(classifier), "classifier should be sklearn classifier."
 
@@ -792,6 +853,10 @@ def create_roc_auc_chart(classifier, X_train, X_test, y_train, y_test):
 
         run = neptune.init_run()
         run["visuals/roc_auc"] = npt_utils.create_roc_auc_chart(rfc, X_train, X_test, y_train, y_test)
+
+    For more, see the docs:
+        Tutorial: https://docs.neptune.ai/integrations/sklearn/
+        API reference: https://docs.neptune.ai/api/integrations/sklearn/
     """
     assert is_classifier(classifier), "classifier should be sklearn classifier."
 
@@ -832,6 +897,10 @@ def create_precision_recall_chart(classifier, X_test, y_test, y_pred_proba=None)
 
         run = neptune.init_run()
         run["visuals/precision_recall"] = npt_utils.create_precision_recall_chart(rfc, X_test, y_test)
+
+    For more, see the docs:
+        Tutorial: https://docs.neptune.ai/integrations/sklearn/
+        API reference: https://docs.neptune.ai/api/integrations/sklearn/
     """
     assert is_classifier(classifier), "classifier should be sklearn classifier."
 
@@ -882,6 +951,10 @@ def create_class_prediction_error_chart(classifier, X_train, X_test, y_train, y_
         run["visuals/class_prediction_error"] = npt_utils.create_class_prediction_error_chart(
             rfc, X_train, X_test, y_train, y_test
         )
+
+    For more, see the docs:
+        Tutorial: https://docs.neptune.ai/integrations/sklearn/
+        API reference: https://docs.neptune.ai/api/integrations/sklearn/
     """
     assert is_classifier(classifier), "classifier should be sklearn classifier."
 
@@ -922,6 +995,10 @@ def get_cluster_labels(model, X, nrows=1000, **kwargs):
 
         run = neptune.init_run()
         run["kmeans/cluster_labels"] = npt_utils.get_cluster_labels(km, X)
+
+    For more, see the docs:
+        Tutorial: https://docs.neptune.ai/integrations/sklearn/
+        API reference: https://docs.neptune.ai/api/integrations/sklearn/
     """
     assert isinstance(model, KMeans), "Model should be sklearn KMeans instance."
     assert isinstance(nrows, int), "nrows should be integer, {} was passed".format(type(nrows))
@@ -954,6 +1031,10 @@ def create_kelbow_chart(model, X, **kwargs):
 
         run = neptune.init_run()
         run["kmeans/kelbow"] = npt_utils.create_kelbow_chart(km, X)
+
+    For more, see the docs:
+        Tutorial: https://docs.neptune.ai/integrations/sklearn/
+        API reference: https://docs.neptune.ai/api/integrations/sklearn/
     """
     assert isinstance(model, KMeans), "Model should be sklearn KMeans instance."
 
@@ -1001,6 +1082,10 @@ def create_silhouette_chart(model, X, **kwargs):
 
         run = neptune.init_run()
         run["kmeans/silhouette"] = npt_utils.create_silhouette_chart(km, X, n_clusters=12)
+
+    For more, see the docs:
+        Tutorial: https://docs.neptune.ai/integrations/sklearn/
+        API reference: https://docs.neptune.ai/api/integrations/sklearn/
     """
     assert isinstance(model, KMeans), "Model should be sklearn KMeans instance."
 
