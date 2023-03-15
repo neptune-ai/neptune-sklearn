@@ -1,3 +1,9 @@
+## neptune-sklearn 2.1.0
+
+### Changes
+- removed `neptune` and `neptune-client` from base requirements
+- updated integration for compatibility with `neptune 1.X`
+
 ## neptune-sklearn 2.0.0
 
 ### Changes
