@@ -38,9 +38,7 @@ __all__ = [
 ]
 
 import matplotlib.pyplot as plt
-import neptune
 import pandas as pd
-from neptune.utils import stringify_unsupported
 from scikitplot.estimators import plot_learning_curve
 from scikitplot.metrics import plot_precision_recall
 from sklearn.base import (
@@ -74,6 +72,19 @@ from yellowbrick.regressor import (
 )
 
 from neptune_sklearn.impl.version import __version__
+
+try:
+    from neptune.types import (
+        File,
+        FileSeries,
+    )
+    from neptune.utils import stringify_unsupported
+except ImportError:
+    from neptune.new.types import (
+        File,
+        FileSeries,
+    )
+    from neptune.new.utils import stringify_unsupported
 
 
 def create_regressor_summary(regressor, X_train, X_test, y_train, y_test, nrows=1000, log_charts=True):
@@ -370,7 +381,7 @@ def get_pickled_model(estimator):
         is_regressor(estimator) or is_classifier(estimator) or isinstance(estimator, KMeans)
     ), "Estimator should be sklearn regressor, classifier, or Kmeans instance."
 
-    return neptune.types.File.as_pickle(estimator)
+    return File.as_pickle(estimator)
 
 
 def get_test_preds(estimator, X_test, y_test, y_pred=None, nrows=1000):
@@ -422,7 +433,7 @@ def get_test_preds(estimator, X_test, y_test, y_pred=None, nrows=1000):
     if len(y_pred.shape) == 1:
         df = pd.DataFrame(data={"y_true": y_test, "y_pred": y_pred})
         df = df.head(n=nrows)
-        preds = neptune.types.File.as_html(df)
+        preds = File.as_html(df)
     # multi output
     if len(y_pred.shape) == 2:
         df = pd.DataFrame()
@@ -430,7 +441,7 @@ def get_test_preds(estimator, X_test, y_test, y_pred=None, nrows=1000):
             df["y_test_output_{}".format(j)] = y_test[:, j]
             df["y_pred_output_{}".format(j)] = y_pred[:, j]
         df = df.head(n=nrows)
-        preds = neptune.types.File.as_html(df)
+        preds = File.as_html(df)
 
     return preds
 
@@ -491,7 +502,7 @@ def get_test_preds_proba(classifier, X_test=None, y_pred_proba=None, nrows=1000)
     df = pd.DataFrame(data=y_pred_proba, columns=classifier.classes_)
     df = df.head(n=nrows)
 
-    return neptune.types.File.as_html(df)
+    return File.as_html(df)
 
 
 def get_scores(estimator, X, y, y_pred=None):
@@ -606,7 +617,7 @@ def create_learning_curve_chart(regressor, X_train, y_train):
             | The regression target for training
 
     Returns:
-        ``neptune.types.File`` object that you can assign to run's ``base_namespace``.
+        ``neptune.type.File`` object that you can assign to run's ``base_namespace``.
 
     Examples:
         .. code:: python3
@@ -627,7 +638,7 @@ def create_learning_curve_chart(regressor, X_train, y_train):
         fig, ax = plt.subplots()
         plot_learning_curve(regressor, X_train, y_train, ax=ax)
 
-        chart = neptune.types.File.as_image(fig)
+        chart = File.as_image(fig)
         plt.close(fig)
     except Exception as e:
         print("Did not log learning curve chart. Error: {}".format(e))
@@ -675,7 +686,7 @@ def create_feature_importance_chart(regressor, X_train, y_train):
         visualizer.fit(X_train, y_train)
         visualizer.finalize()
 
-        chart = neptune.types.File.as_image(fig)
+        chart = File.as_image(fig)
         plt.close(fig)
     except Exception as e:
         print("Did not log feature importance chart. Error: {}".format(e))
@@ -727,7 +738,7 @@ def create_residuals_chart(regressor, X_train, X_test, y_train, y_test):
         visualizer.fit(X_train, y_train)
         visualizer.score(X_test, y_test)
         visualizer.finalize()
-        chart = neptune.types.File.as_image(fig)
+        chart = File.as_image(fig)
         plt.close(fig)
     except Exception as e:
         print("Did not log residuals chart. Error: {}".format(e))
@@ -779,7 +790,7 @@ def create_prediction_error_chart(regressor, X_train, X_test, y_train, y_test):
         visualizer.fit(X_train, y_train)
         visualizer.score(X_test, y_test)
         visualizer.finalize()
-        chart = neptune.types.File.as_image(fig)
+        chart = File.as_image(fig)
         plt.close(fig)
     except Exception as e:
         print("Did not log prediction error chart. Error: {}".format(e))
@@ -826,7 +837,7 @@ def create_cooks_distance_chart(regressor, X_train, y_train):
         visualizer = CooksDistance(ax=ax)
         visualizer.fit(X_train, y_train)
         visualizer.finalize()
-        chart = neptune.types.File.as_image(fig)
+        chart = File.as_image(fig)
         plt.close(fig)
     except Exception as e:
         print("Did not log cooks distance chart. Error: {}".format(e))
@@ -879,7 +890,7 @@ def create_classification_report_chart(classifier, X_train, X_test, y_train, y_t
         visualizer.fit(X_train, y_train)
         visualizer.score(X_test, y_test)
         visualizer.finalize()
-        chart = neptune.types.File.as_image(fig)
+        chart = File.as_image(fig)
         plt.close(fig)
     except Exception as e:
         print("Did not log Classification Report chart. Error: {}".format(e))
@@ -932,7 +943,7 @@ def create_confusion_matrix_chart(classifier, X_train, X_test, y_train, y_test):
         visualizer.fit(X_train, y_train)
         visualizer.score(X_test, y_test)
         visualizer.finalize()
-        chart = neptune.types.File.as_image(fig)
+        chart = File.as_image(fig)
         plt.close(fig)
     except Exception as e:
         print("Did not log Confusion Matrix chart. Error: {}".format(e))
@@ -984,7 +995,7 @@ def create_roc_auc_chart(classifier, X_train, X_test, y_train, y_test):
         visualizer.fit(X_train, y_train)
         visualizer.score(X_test, y_test)
         visualizer.finalize()
-        chart = neptune.types.File.as_image(fig)
+        chart = File.as_image(fig)
         plt.close(fig)
     except Exception as e:
         print("Did not log ROC-AUC chart. Error {}".format(e))
@@ -1041,7 +1052,7 @@ def create_precision_recall_chart(classifier, X_test, y_test, y_pred_proba=None)
     try:
         fig, ax = plt.subplots()
         plot_precision_recall(y_test, y_pred_proba, ax=ax)
-        chart = neptune.types.File.as_image(fig)
+        chart = File.as_image(fig)
         plt.close(fig)
     except Exception as e:
         print("Did not log Precision-Recall chart. Error {}".format(e))
@@ -1094,7 +1105,7 @@ def create_class_prediction_error_chart(classifier, X_train, X_test, y_train, y_
         visualizer.fit(X_train, y_train)
         visualizer.score(X_test, y_test)
         visualizer.finalize()
-        chart = neptune.types.File.as_image(fig)
+        chart = File.as_image(fig)
         plt.close(fig)
     except Exception as e:
         print("Did not log Class Prediction Error chart. Error {}".format(e))
@@ -1142,7 +1153,7 @@ def get_cluster_labels(model, X, nrows=1000, **kwargs):
     df = pd.DataFrame(data={"cluster_labels": labels})
     df = df.head(n=nrows)
 
-    return neptune.types.File.as_html(df)
+    return File.as_html(df)
 
 
 def create_kelbow_chart(model, X, **kwargs):
@@ -1191,7 +1202,7 @@ def create_kelbow_chart(model, X, **kwargs):
         visualizer = KElbowVisualizer(model, k=k, ax=ax)
         visualizer.fit(X)
         visualizer.finalize()
-        chart = neptune.types.File.as_image(fig)
+        chart = File.as_image(fig)
         plt.close(fig)
     except Exception as e:
         print("Did not log KMeans elbow chart. Error {}".format(e))
@@ -1248,9 +1259,9 @@ def create_silhouette_chart(model, X, **kwargs):
             visualizer = SilhouetteVisualizer(model, is_fitted=True, ax=ax)
             visualizer.fit(X)
             visualizer.finalize()
-            charts.append(neptune.types.File.as_image(fig))
+            charts.append(File.as_image(fig))
             plt.close(fig)
         except Exception as e:
             print("Did not log Silhouette Coefficients chart. Error {}".format(e))
 
-    return neptune.types.FileSeries(charts)
+    return FileSeries(charts)
