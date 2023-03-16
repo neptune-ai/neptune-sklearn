@@ -1,4 +1,8 @@
-import neptune
+try:
+    from neptune import init_run
+except ImportError:
+    from neptune.new import init_run
+
 from sklearn import datasets
 from sklearn.cluster import KMeans
 from sklearn.linear_model import (
@@ -11,7 +15,7 @@ import neptune_sklearn as npt_utils
 
 
 def test_classifier_summary():
-    run = neptune.init_run()
+    run = init_run()
 
     iris = datasets.load_iris()
     X = iris.data[:, :2]
@@ -28,7 +32,7 @@ def test_classifier_summary():
 
 
 def test_regressor_summary():
-    run = neptune.init_run()
+    run = init_run()
 
     X, y = datasets.load_diabetes(return_X_y=True)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5)
@@ -43,7 +47,7 @@ def test_regressor_summary():
 
 
 def test_kmeans_summary():
-    run = neptune.init_run()
+    run = init_run()
 
     iris = datasets.load_iris()
     X = iris.data[:, :2]
