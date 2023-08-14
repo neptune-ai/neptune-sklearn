@@ -1,12 +1,13 @@
 # Neptune + scikit-learn integration
 
-Experiment tracking, model registry, data versioning, and live model monitoring for scikit-learn (sklearn) trained models.
+Experiment tracking for scikit-learn (sklearn) trained models.
 
 ## What will you get with this integration?
 
-* Log, display, organize, and compare ML experiments in a single place
-* Version, store, manage, and query trained models, and model building metadata
-* Record and monitor model training, evaluation, or production runs live
+* Log, organize, visualize, and compare ML experiments in a single place
+* Monitor model training live
+* Version and query production-ready models and associated metadata (e.g., datasets)
+* Collaborate with the team and across the organization
 
 ## What will be logged to Neptune?
 
@@ -20,8 +21,7 @@ Experiment tracking, model registry, data versioning, and live model monitoring 
 * metadata including git summary info,
 * [other metadata](https://docs.neptune.ai/logging/what_you_can_log)
 
-![image](https://user-images.githubusercontent.com/97611089/160642485-afca99da-9f7b-4d80-b0be-810c9d5770e5.png)
-*Confusion matrix logged to Neptune*
+![image](https://docs.neptune.ai/img/app/integrations/scikit-learn.png)
 
 ## Resources
 
