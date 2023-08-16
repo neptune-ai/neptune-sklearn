@@ -1,6 +1,6 @@
 # Neptune + scikit-learn integration
 
-Experiment tracking for scikit-learn (sklearn) trained models.
+Experiment tracking for scikit-learn&ndash;trained models.
 
 ## What will you get with this integration?
 
