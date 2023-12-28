@@ -144,16 +144,19 @@ def create_regressor_summary(regressor, X_train, X_test, y_train, y_test, nrows=
         "scores": get_scores(regressor, X_test, y_test, y_pred=y_pred),
     }
 
-    if log_charts:
-        reg_summary["diagnostics_charts"] = {
-            "learning_curve": create_learning_curve_chart(regressor, X_train, y_train),
-            "feature_importance": create_feature_importance_chart(regressor, X_train, y_train),
-            "residuals": create_residuals_chart(regressor, X_train, X_test, y_train, y_test),
-            "prediction_error": create_prediction_error_chart(regressor, X_train, X_test, y_train, y_test),
-            "cooks_distance": create_cooks_distance_chart(regressor, X_train, y_train),
-        }
-
     reg_summary["integration/about/neptune-sklearn"] = __version__
+
+    if log_charts:
+        if learning_curve := create_learning_curve_chart(regressor, X_train, y_train):
+            reg_summary["diagnostics_charts/learning_curve"] = learning_curve
+        if feature_importance := create_feature_importance_chart(regressor, X_train, y_train):
+            reg_summary["diagnostics_charts/feature_importance"] = feature_importance
+        if residuals := create_residuals_chart(regressor, X_train, X_test, y_train, y_test):
+            reg_summary["diagnostics_charts/residuals"] = residuals
+        if prediction_error := create_prediction_error_chart(regressor, X_train, X_test, y_train, y_test):
+            reg_summary["diagnostics_charts/prediction_error"] = prediction_error
+        if cooks_distance := create_cooks_distance_chart(regressor, X_train, y_train):
+            reg_summary["diagnostics_charts/cooks_distance"] = cooks_distance
 
     return reg_summary
 
@@ -217,16 +220,19 @@ def create_classifier_summary(classifier, X_train, X_test, y_train, y_test, nrow
         "scores": get_scores(classifier, X_test, y_test, y_pred=y_pred),
     }
 
-    if log_charts:
-        cls_summary["diagnostics_charts"] = {
-            "classification_report": create_classification_report_chart(classifier, X_train, X_test, y_train, y_test),
-            "confusion_matrix": create_confusion_matrix_chart(classifier, X_train, X_test, y_train, y_test),
-            "ROC_AUC": create_roc_auc_chart(classifier, X_train, X_test, y_train, y_test),
-            "precision_recall": create_precision_recall_chart(classifier, X_test, y_test),
-            "class_prediction_error": create_class_prediction_error_chart(classifier, X_train, X_test, y_train, y_test),
-        }
-
     cls_summary["integration/about/neptune-sklearn"] = __version__
+
+    if log_charts:
+        if classification_report := create_classification_report_chart(classifier, X_train, X_test, y_train, y_test):
+            cls_summary["diagnostics_charts/classification_report"] = classification_report
+        if confusion_matrix := create_confusion_matrix_chart(classifier, X_train, X_test, y_train, y_test):
+            cls_summary["diagnostics_charts/confusion_matrix"] = confusion_matrix
+        if ROC_AUC := create_roc_auc_chart(classifier, X_train, X_test, y_train, y_test):
+            cls_summary["diagnostics_charts/ROC_AUC"] = ROC_AUC
+        if precision_recall := create_precision_recall_chart(classifier, X_test, y_test):
+            cls_summary["diagnostics_charts/precision_recall"] = precision_recall
+        if class_prediction_error := create_class_prediction_error_chart(classifier, X_train, X_test, y_train, y_test):
+            cls_summary["diagnostics_charts/class_prediction_error"] = class_prediction_error
 
     return cls_summary
 
@@ -272,12 +278,12 @@ def create_kmeans_summary(model, X, nrows=1000, **kwargs):
     kmeans_summary["all_params"] = stringify_unsupported(get_estimator_params(model))
     kmeans_summary["pickled_model"] = get_pickled_model(model)
     kmeans_summary["cluster_labels"] = get_cluster_labels(model, X, nrows=nrows, **kwargs)
-    kmeans_summary["diagnostics_charts"] = {
-        "kelbow": create_kelbow_chart(model, X, **kwargs),
-        "silhouette": create_silhouette_chart(model, X, **kwargs),
-    }
-
     kmeans_summary["integration/about/neptune-sklearn"] = __version__
+
+    if kelbow := create_kelbow_chart(model, X, **kwargs):
+        kmeans_summary["diagnostics_charts/kelbow"] = kelbow
+    if silhouette := create_silhouette_chart(model, X, **kwargs):
+        kmeans_summary["diagnostics_charts/silhouette"] = silhouette
 
     return kmeans_summary
 

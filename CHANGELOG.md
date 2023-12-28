@@ -1,3 +1,11 @@
+## [UNRELEASED] neptune-sklearn 2.2.0
+
+### Fixes
+- `create_*_summary()` now does not throw a `NeptuneUnsupportedType` error if expected metadata is not found
+
+### Changes
+- Bumped minimum supported Python version to 3.8
+
 ## neptune-sklearn 2.1.0
 
 ### Changes
