@@ -1,3 +1,8 @@
+## [UNRELEASED] neptune-sklearn 2.1.1
+
+### Fixes
+- Fixed method names in docstrings ([#18](https://github.com/neptune-ai/neptune-sklearn/pull/18))
+
 ## neptune-sklearn 2.1.0
 
 ### Changes
