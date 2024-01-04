@@ -110,8 +110,8 @@ def create_regressor_summary(regressor, X_train, X_test, y_train, y_test, nrows=
         log_charts (`bool`, optional): Whether to calculate and log chart visualizations.
             Note: Calculating visualizations is potentially expensive depending on input data and regressor,
             and may take some time to finish. This is equivalent to calling the following functions from
-            this module: `log_learning_curve_chart()`, `log_feature_importance_chart()`, `log_residuals_chart()`,
-            `log_prediction_error_chart()`, and `log_cooks_distance_chart()`.
+            this module: `create_learning_curve_chart()`, `create_feature_importance_chart()`, `create_residuals_chart()`,
+            `create_prediction_error_chart()`, and `create_cooks_distance_chart()`.
 
     Returns:
         `dict` with all summary items.
@@ -182,8 +182,8 @@ def create_classifier_summary(classifier, X_train, X_test, y_train, y_test, nrow
         log_charts (`bool`, optional): Whether to calculate and log chart visualizations.
             Note: Calculating visualizations is potentially expensive depending on input data and classifier, and
             may take some time to finish. This is equivalent to calling the following functions from this module:
-            `log_classification_report_chart()`, `log_confusion_matrix_chart()`, `log_roc_auc_chart()`,
-            `log_precision_recall_chart()`, and `log_class_prediction_error_chart()`.
+            `create_classification_report_chart()`, `create_confusion_matrix_chart()`, `create_roc_auc_chart()`,
+            `create_precision_recall_chart()`, and `create_class_prediction_error_chart()`.
 
     Returns:
         `dict` with all summary items.
