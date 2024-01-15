@@ -231,7 +231,7 @@ def create_classifier_summary(classifier, X_train, X_test, y_train, y_test, nrow
     if log_charts:
         classification_report = create_classification_report_chart(classifier, X_train, X_test, y_train, y_test)
         confusion_matrix = create_confusion_matrix_chart(classifier, X_train, X_test, y_train, y_test)
-        ROC_AUC = create_roc_auc_chart(classifier, X_train, X_test, y_train, y_test)
+        roc_auc = create_roc_auc_chart(classifier, X_train, X_test, y_train, y_test)
         precision_recall = create_precision_recall_chart(classifier, X_test, y_test)
         class_prediction_error = create_class_prediction_error_chart(classifier, X_train, X_test, y_train, y_test)
 
@@ -239,8 +239,8 @@ def create_classifier_summary(classifier, X_train, X_test, y_train, y_test, nrow
             cls_summary["diagnostics_charts/classification_report"] = classification_report
         if confusion_matrix:
             cls_summary["diagnostics_charts/confusion_matrix"] = confusion_matrix
-        if ROC_AUC:
-            cls_summary["diagnostics_charts/ROC_AUC"] = ROC_AUC
+        if roc_auc:
+            cls_summary["diagnostics_charts/ROC_AUC"] = roc_auc
         if precision_recall:
             cls_summary["diagnostics_charts/precision_recall"] = precision_recall
         if class_prediction_error:
