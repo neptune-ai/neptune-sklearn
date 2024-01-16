@@ -6,6 +6,7 @@ except ImportError:
 import pytest
 from sklearn import datasets
 from sklearn.cluster import KMeans
+from sklearn.dummy import DummyRegressor
 from sklearn.linear_model import (
     LinearRegression,
     LogisticRegression,
@@ -75,11 +76,11 @@ def test_unsupported_object():
         X, y = datasets.load_diabetes(return_X_y=True)
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5)
 
-        model = LinearRegression()
+        model = DummyRegressor()
 
         param_grid = {
-            "copy_X": [True, False],
-            "fit_intercept": [True, False],
+            "strategy": ["mean", "median", "quantile"],
+            "quantile": [0.1, 0.5, 1.0],
         }
 
         X, y = datasets.fetch_california_housing(return_X_y=True)[:10]
