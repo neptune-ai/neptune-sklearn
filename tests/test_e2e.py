@@ -3,13 +3,18 @@ try:
 except ImportError:
     from neptune.new import init_run
 
+import pytest
 from sklearn import datasets
 from sklearn.cluster import KMeans
+from sklearn.dummy import DummyRegressor
 from sklearn.linear_model import (
     LinearRegression,
     LogisticRegression,
 )
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import (
+    GridSearchCV,
+    train_test_split,
+)
 
 import neptune_sklearn as npt_utils
 
@@ -59,6 +64,33 @@ def test_kmeans_summary():
 
     run.wait()
     validate_run(run, log_charts=True)
+
+
+@pytest.mark.filterwarnings("error::neptune.common.warnings.NeptuneUnsupportedType")
+def test_unsupported_object():
+    """This method checks if Neptune throws a `NeptuneUnsupportedType` warning if expected metadata
+    is not found or skips trying to log such metadata"""
+
+    with init_run() as run:
+
+        X, y = datasets.load_diabetes(return_X_y=True)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5)
+
+        model = DummyRegressor()
+
+        param_grid = {
+            "strategy": ["mean", "median", "quantile"],
+            "quantile": [0.1, 0.5, 1.0],
+        }
+
+        X, y = datasets.fetch_california_housing(return_X_y=True)[:10]
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+        grid_cv = GridSearchCV(model, param_grid, scoring="neg_mean_absolute_error", cv=2).fit(X_train, y_train)
+
+        run["regressor_summary"] = npt_utils.create_regressor_summary(grid_cv, X_train, X_test, y_train, y_test)
+
+        run.wait()
 
 
 def validate_run(run, log_charts):

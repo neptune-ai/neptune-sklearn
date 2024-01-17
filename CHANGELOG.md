@@ -1,6 +1,7 @@
 ## [UNRELEASED] neptune-sklearn 2.1.1
 
 ### Fixes
+- `create_*_summary()` now does not throw a `NeptuneUnsupportedType` error if expected metadata is not found ([#21](https://github.com/neptune-ai/neptune-sklearn/pull/21))
 - Fixed method names in docstrings ([#18](https://github.com/neptune-ai/neptune-sklearn/pull/18))
 
 ## neptune-sklearn 2.1.0

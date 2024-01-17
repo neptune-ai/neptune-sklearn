@@ -110,8 +110,8 @@ def create_regressor_summary(regressor, X_train, X_test, y_train, y_test, nrows=
         log_charts (`bool`, optional): Whether to calculate and log chart visualizations.
             Note: Calculating visualizations is potentially expensive depending on input data and regressor,
             and may take some time to finish. This is equivalent to calling the following functions from
-            this module: `create_learning_curve_chart()`, `create_feature_importance_chart()`, `create_residuals_chart()`,
-            `create_prediction_error_chart()`, and `create_cooks_distance_chart()`.
+            this module: `create_learning_curve_chart()`, `create_feature_importance_chart()`,
+            `create_residuals_chart()`, `create_prediction_error_chart()`, and `create_cooks_distance_chart()`.
 
     Returns:
         `dict` with all summary items.
@@ -144,16 +144,25 @@ def create_regressor_summary(regressor, X_train, X_test, y_train, y_test, nrows=
         "scores": get_scores(regressor, X_test, y_test, y_pred=y_pred),
     }
 
-    if log_charts:
-        reg_summary["diagnostics_charts"] = {
-            "learning_curve": create_learning_curve_chart(regressor, X_train, y_train),
-            "feature_importance": create_feature_importance_chart(regressor, X_train, y_train),
-            "residuals": create_residuals_chart(regressor, X_train, X_test, y_train, y_test),
-            "prediction_error": create_prediction_error_chart(regressor, X_train, X_test, y_train, y_test),
-            "cooks_distance": create_cooks_distance_chart(regressor, X_train, y_train),
-        }
-
     reg_summary["integration/about/neptune-sklearn"] = __version__
+
+    if log_charts:
+        learning_curve = create_learning_curve_chart(regressor, X_train, y_train)
+        feature_importance = create_feature_importance_chart(regressor, X_train, y_train)
+        residuals = create_residuals_chart(regressor, X_train, X_test, y_train, y_test)
+        prediction_error = create_prediction_error_chart(regressor, X_train, X_test, y_train, y_test)
+        cooks_distance = create_cooks_distance_chart(regressor, X_train, y_train)
+
+        if learning_curve:
+            reg_summary["diagnostics_charts/learning_curve"] = learning_curve
+        if feature_importance:
+            reg_summary["diagnostics_charts/feature_importance"] = feature_importance
+        if residuals:
+            reg_summary["diagnostics_charts/residuals"] = residuals
+        if prediction_error:
+            reg_summary["diagnostics_charts/prediction_error"] = prediction_error
+        if cooks_distance:
+            reg_summary["diagnostics_charts/cooks_distance"] = cooks_distance
 
     return reg_summary
 
@@ -217,16 +226,25 @@ def create_classifier_summary(classifier, X_train, X_test, y_train, y_test, nrow
         "scores": get_scores(classifier, X_test, y_test, y_pred=y_pred),
     }
 
-    if log_charts:
-        cls_summary["diagnostics_charts"] = {
-            "classification_report": create_classification_report_chart(classifier, X_train, X_test, y_train, y_test),
-            "confusion_matrix": create_confusion_matrix_chart(classifier, X_train, X_test, y_train, y_test),
-            "ROC_AUC": create_roc_auc_chart(classifier, X_train, X_test, y_train, y_test),
-            "precision_recall": create_precision_recall_chart(classifier, X_test, y_test),
-            "class_prediction_error": create_class_prediction_error_chart(classifier, X_train, X_test, y_train, y_test),
-        }
-
     cls_summary["integration/about/neptune-sklearn"] = __version__
+
+    if log_charts:
+        classification_report = create_classification_report_chart(classifier, X_train, X_test, y_train, y_test)
+        confusion_matrix = create_confusion_matrix_chart(classifier, X_train, X_test, y_train, y_test)
+        roc_auc = create_roc_auc_chart(classifier, X_train, X_test, y_train, y_test)
+        precision_recall = create_precision_recall_chart(classifier, X_test, y_test)
+        class_prediction_error = create_class_prediction_error_chart(classifier, X_train, X_test, y_train, y_test)
+
+        if classification_report:
+            cls_summary["diagnostics_charts/classification_report"] = classification_report
+        if confusion_matrix:
+            cls_summary["diagnostics_charts/confusion_matrix"] = confusion_matrix
+        if roc_auc:
+            cls_summary["diagnostics_charts/ROC_AUC"] = roc_auc
+        if precision_recall:
+            cls_summary["diagnostics_charts/precision_recall"] = precision_recall
+        if class_prediction_error:
+            cls_summary["diagnostics_charts/class_prediction_error"] = class_prediction_error
 
     return cls_summary
 
@@ -272,12 +290,15 @@ def create_kmeans_summary(model, X, nrows=1000, **kwargs):
     kmeans_summary["all_params"] = stringify_unsupported(get_estimator_params(model))
     kmeans_summary["pickled_model"] = get_pickled_model(model)
     kmeans_summary["cluster_labels"] = get_cluster_labels(model, X, nrows=nrows, **kwargs)
-    kmeans_summary["diagnostics_charts"] = {
-        "kelbow": create_kelbow_chart(model, X, **kwargs),
-        "silhouette": create_silhouette_chart(model, X, **kwargs),
-    }
-
     kmeans_summary["integration/about/neptune-sklearn"] = __version__
+
+    kelbow = create_kelbow_chart(model, X, **kwargs)
+    silhouette = create_silhouette_chart(model, X, **kwargs)
+
+    if kelbow:
+        kmeans_summary["diagnostics_charts/kelbow"] = kelbow
+    if silhouette:
+        kmeans_summary["diagnostics_charts/silhouette"] = silhouette
 
     return kmeans_summary
 
