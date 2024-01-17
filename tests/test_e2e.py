@@ -6,10 +6,9 @@ except ImportError:
 import pytest
 from sklearn import datasets
 from sklearn.cluster import KMeans
-from sklearn.dummy import DummyRegressor
-from sklearn.linear_model import (
-    LinearRegression,
-    LogisticRegression,
+from sklearn.dummy import (
+    DummyClassifier,
+    DummyRegressor,
 )
 from sklearn.model_selection import (
     GridSearchCV,
@@ -27,7 +26,7 @@ def test_classifier_summary():
     y = iris.target
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5)
 
-    model = LogisticRegression(C=1e5)
+    model = DummyClassifier()
     model.fit(X_train, y_train)
 
     run["summary"] = npt_utils.create_classifier_summary(model, X_train, X_test, y_train, y_test)
@@ -42,7 +41,7 @@ def test_regressor_summary():
     X, y = datasets.load_diabetes(return_X_y=True)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5)
 
-    model = LinearRegression()
+    model = DummyRegressor()
     model.fit(X_train, y_train)
 
     run["summary"] = npt_utils.create_regressor_summary(model, X_train, X_test, y_train, y_test)
