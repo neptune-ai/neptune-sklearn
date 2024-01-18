@@ -21,51 +21,42 @@ from sklearn.model_selection import (
 import neptune_sklearn as npt_utils
 
 
-def test_classifier_summary():
+def test_classifier_summary(iris):
     with init_run() as run:
-
-        iris = datasets.load_iris()
-        X = iris.data[:, :2]
-        y = iris.target
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5)
-
         model = DummyClassifier()
-        model.fit(X_train, y_train)
+        model.fit(iris.x_train, iris.y_train)
 
-        run["summary"] = npt_utils.create_classifier_summary(model, X_train, X_test, y_train, y_test)
+        run["summary"] = npt_utils.create_classifier_summary(
+            model, iris.x_train, iris.x_test, iris.y_train, iris.y_test
+        )
 
-    run.wait()
-    validate_run(run, log_charts=True)
+        run.wait()
+        validate_run(run, log_charts=True)
 
 
-def test_regressor_summary():
+def test_regressor_summary(diabetes):
     with init_run() as run:
-
-        X, y = datasets.load_diabetes(return_X_y=True)
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5)
-
         model = DummyRegressor()
-        model.fit(X_train, y_train)
+        model.fit(diabetes.x_train, diabetes.y_train)
 
-        run["summary"] = npt_utils.create_regressor_summary(model, X_train, X_test, y_train, y_test)
+        run["summary"] = npt_utils.create_regressor_summary(
+            model, diabetes.x_train, diabetes.x_test, diabetes.y_train, diabetes.y_test
+        )
 
-    run.wait()
-    validate_run(run, log_charts=True)
+        run.wait()
+        validate_run(run, log_charts=True)
 
 
-def test_kmeans_summary():
+def test_kmeans_summary(iris):
     with init_run() as run:
-
-        iris = datasets.load_iris()
-        X = iris.data[:, :2]
 
         model = KMeans()
-        model.fit(X)
+        model.fit(iris.x)
 
-        run["summary"] = npt_utils.create_kmeans_summary(model, X, n_clusters=3)
+        run["summary"] = npt_utils.create_kmeans_summary(model, iris.x, n_clusters=3)
 
-    run.wait()
-    validate_run(run, log_charts=True)
+        run.wait()
+        validate_run(run, log_charts=True)
 
 
 @pytest.mark.filterwarnings("error::neptune.common.warnings.NeptuneUnsupportedType")
