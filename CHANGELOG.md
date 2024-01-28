@@ -1,3 +1,8 @@
+## [UNRELEASED] neptune-sklearn 2.1.2
+
+### Changes
+- Constraining scipy to `<1.12` ([#25](https://github.com/neptune-ai/neptune-sklearn/pull/25))
+
 ## neptune-sklearn 2.1.1
 
 ### Fixes
