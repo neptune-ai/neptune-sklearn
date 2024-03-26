@@ -6,6 +6,7 @@ try:
 except ImportError:
     from neptune.new import Run, init_run
 
+import matplotlib as mpl
 import pytest
 from sklearn.cluster import KMeans
 from sklearn.dummy import (
@@ -15,6 +16,8 @@ from sklearn.dummy import (
 from sklearn.model_selection import GridSearchCV
 
 import neptune_sklearn as npt_utils
+
+mpl.use("agg")
 
 
 def test_classifier_summary(iris):

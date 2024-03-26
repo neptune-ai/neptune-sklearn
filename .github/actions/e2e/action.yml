@@ -21,11 +21,6 @@ runs:
       shell: bash
       env:
         MPLLOCALFREETYPE: "1"
-    # - name: Setup Graphviz
-    #   uses: ts-graphviz/setup-graphviz@v1
-    #   with:
-    #     ubuntu-skip-apt-update: true
-    #     macos-skip-brew-update: true
 
     - name: Run tests
       working-directory: ${{ inputs.working_directory }}
