@@ -1,3 +1,9 @@
+## neptune-sklearn 2.1.3
+
+### Changes
+- Constrained matplotlib to `<3.3` on Python `>=3.12` ([#28](https://github.com/neptune-ai/neptune-sklearn/pull/28))
+- Replaced `print()` with `warnings.warn()` to better capture `stderr`  ([#28](https://github.com/neptune-ai/neptune-sklearn/pull/28))
+
 ## neptune-sklearn 2.1.2
 
 ### Changes
