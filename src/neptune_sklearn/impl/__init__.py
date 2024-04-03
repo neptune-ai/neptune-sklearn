@@ -730,7 +730,7 @@ def create_prediction_error_chart(regressor, X_train, X_test, y_train, y_test):
     return chart
 
 
-def monkey_draw(self):
+def __monkey_draw(self):
     """
     Monkey patches `yellowbrick.regressor.CooksDistance.draw()`
     to remove unsupported matplotlib argument `use_line_collection`.
@@ -763,7 +763,7 @@ def monkey_draw(self):
     return self.ax
 
 
-CooksDistance.draw = monkey_draw
+CooksDistance.draw = __monkey_draw
 
 
 def create_cooks_distance_chart(regressor, X_train, y_train):
