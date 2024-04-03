@@ -730,6 +730,42 @@ def create_prediction_error_chart(regressor, X_train, X_test, y_train, y_test):
     return chart
 
 
+def monkey_draw(self):
+    """
+    Monkey patches `yellowbrick.regressor.CooksDistance.draw()`
+    to remove unsupported matplotlib argument `use_line_collection`.
+
+    Draws a stem plot where each stem is the Cook's Distance of the instance at the
+    index specified by the x axis. Optionaly draws a threshold line.
+    """
+    # Draw a stem plot with the influence for each instance
+    _, _, baseline = self.ax.stem(
+        self.distance_,
+        linefmt=self.linefmt,
+        markerfmt=self.markerfmt,
+        # use_line_collection=True
+    )
+
+    # No padding on either side of the instance index
+    self.ax.set_xlim(0, len(self.distance_))
+
+    # Draw the threshold for most influential points
+    if self.draw_threshold:
+        label = r"{:0.2f}% > $I_t$ ($I_t=\frac {{4}} {{n}}$)".format(self.outlier_percentage_)
+        self.ax.axhline(
+            self.influence_threshold_,
+            ls="--",
+            label=label,
+            c=baseline.get_color(),
+            lw=baseline.get_linewidth(),
+        )
+
+    return self.ax
+
+
+CooksDistance.draw = monkey_draw
+
+
 def create_cooks_distance_chart(regressor, X_train, y_train):
     """Creates cooks distance chart.
 
