@@ -19,12 +19,8 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       run: pip install -e .[dev]
       shell: bash
-
-    - name: Setup Graphviz
-      uses: ts-graphviz/setup-graphviz@v1
-      with:
-        ubuntu-skip-apt-update: true
-        macos-skip-brew-update: true
+      env:
+        MPLLOCALFREETYPE: "1"
 
     - name: Run tests
       working-directory: ${{ inputs.working_directory }}

@@ -1,3 +1,11 @@
+## neptune-sklearn 2.1.3
+
+### Fixes
+- Monkey patches [`yellowbrick.regression.CooksDistance.draw()`](https://github.com/DistrictDataLabs/yellowbrick/blob/f7a8e950bd31452ea2f5d402a1c5d519cd163fd5/yellowbrick/regressor/influence.py#L184) to remove unsupported `use_line_collection` matplotlib arg ([#28](https://github.com/neptune-ai/neptune-sklearn/pull/28))
+
+### Changes
+- Replaced `print()` with `warnings.warn()` to better capture `stderr`  ([#28](https://github.com/neptune-ai/neptune-sklearn/pull/28))
+
 ## neptune-sklearn 2.1.2
 
 ### Changes

@@ -86,6 +86,8 @@ except ImportError:
     )
     from neptune.new.utils import stringify_unsupported
 
+from warnings import warn
+
 
 def create_regressor_summary(regressor, X_train, X_test, y_train, y_test, nrows=1000, log_charts=True):
     """Creates scikit-learn regressor summary.
@@ -455,7 +457,7 @@ def get_test_preds_proba(classifier, X_test=None, y_pred_proba=None, nrows=1000)
         try:
             y_pred_proba = classifier.predict_proba(X_test)
         except Exception as e:
-            print("This classifier does not provide predictions probabilities. Error: {}".format(e))
+            warn(f"This classifier does not provide predictions probabilities. Error: {e}")
             return
 
     df = pd.DataFrame(data=y_pred_proba, columns=classifier.classes_)
@@ -590,7 +592,7 @@ def create_learning_curve_chart(regressor, X_train, y_train):
         chart = File.as_image(fig)
         plt.close(fig)
     except Exception as e:
-        print("Did not log learning curve chart. Error: {}".format(e))
+        warn(f"Did not log learning curve chart. Error: {e}")
 
     return chart
 
@@ -633,7 +635,7 @@ def create_feature_importance_chart(regressor, X_train, y_train):
         chart = File.as_image(fig)
         plt.close(fig)
     except Exception as e:
-        print("Did not log feature importance chart. Error: {}".format(e))
+        warn(f"Did not log feature importance chart. Error: {e}")
 
     return chart
 
@@ -678,7 +680,7 @@ def create_residuals_chart(regressor, X_train, X_test, y_train, y_test):
         chart = File.as_image(fig)
         plt.close(fig)
     except Exception as e:
-        print("Did not log residuals chart. Error: {}".format(e))
+        warn(f"Did not log residuals chart. Error: {e}")
 
     return chart
 
@@ -723,9 +725,45 @@ def create_prediction_error_chart(regressor, X_train, X_test, y_train, y_test):
         chart = File.as_image(fig)
         plt.close(fig)
     except Exception as e:
-        print("Did not log prediction error chart. Error: {}".format(e))
+        warn(f"Did not log prediction error chart. Error: {e}")
 
     return chart
+
+
+def _monkey_draw(self):
+    """
+    Monkey patches `yellowbrick.regressor.CooksDistance.draw()`
+    to remove unsupported matplotlib argument `use_line_collection`.
+
+    Draws a stem plot where each stem is the Cook's Distance of the instance at the
+    index specified by the x axis. Optionaly draws a threshold line.
+    """
+    # Draw a stem plot with the influence for each instance
+    _, _, baseline = self.ax.stem(
+        self.distance_,
+        linefmt=self.linefmt,
+        markerfmt=self.markerfmt,
+        # use_line_collection=True
+    )
+
+    # No padding on either side of the instance index
+    self.ax.set_xlim(0, len(self.distance_))
+
+    # Draw the threshold for most influential points
+    if self.draw_threshold:
+        label = r"{:0.2f}% > $I_t$ ($I_t=\frac {{4}} {{n}}$)".format(self.outlier_percentage_)
+        self.ax.axhline(
+            self.influence_threshold_,
+            ls="--",
+            label=label,
+            c=baseline.get_color(),
+            lw=baseline.get_linewidth(),
+        )
+
+    return self.ax
+
+
+CooksDistance.draw = _monkey_draw
 
 
 def create_cooks_distance_chart(regressor, X_train, y_train):
@@ -765,7 +803,7 @@ def create_cooks_distance_chart(regressor, X_train, y_train):
         chart = File.as_image(fig)
         plt.close(fig)
     except Exception as e:
-        print("Did not log cooks distance chart. Error: {}".format(e))
+        warn(f"Did not log cooks distance chart. Error: {e}")
 
     return chart
 
@@ -812,7 +850,7 @@ def create_classification_report_chart(classifier, X_train, X_test, y_train, y_t
         chart = File.as_image(fig)
         plt.close(fig)
     except Exception as e:
-        print("Did not log Classification Report chart. Error: {}".format(e))
+        warn(f"Did not log Classification Report chart. Error: {e}")
 
     return chart
 
@@ -859,7 +897,7 @@ def create_confusion_matrix_chart(classifier, X_train, X_test, y_train, y_test):
         chart = File.as_image(fig)
         plt.close(fig)
     except Exception as e:
-        print("Did not log Confusion Matrix chart. Error: {}".format(e))
+        warn(f"Did not log Confusion Matrix chart. Error: {e}")
 
     return chart
 
@@ -904,7 +942,7 @@ def create_roc_auc_chart(classifier, X_train, X_test, y_train, y_test):
         chart = File.as_image(fig)
         plt.close(fig)
     except Exception as e:
-        print("Did not log ROC-AUC chart. Error {}".format(e))
+        warn(f"Did not log ROC-AUC chart. Error {e}")
 
     return chart
 
@@ -943,9 +981,9 @@ def create_precision_recall_chart(classifier, X_test, y_test, y_pred_proba=None)
         try:
             y_pred_proba = classifier.predict_proba(X_test)
         except Exception as e:
-            print(
-                "Did not log Precision-Recall chart: this classifier does not provide predictions probabilities."
-                "Error {}".format(e)
+            warn(
+                f"""Did not log Precision-Recall chart: this classifier does not provide predictions probabilities.
+                Error {e}"""
             )
             return chart
 
@@ -955,7 +993,7 @@ def create_precision_recall_chart(classifier, X_test, y_test, y_pred_proba=None)
         chart = File.as_image(fig)
         plt.close(fig)
     except Exception as e:
-        print("Did not log Precision-Recall chart. Error {}".format(e))
+        warn(f"Did not log Precision-Recall chart. Error {e}")
 
     return chart
 
@@ -1002,7 +1040,7 @@ def create_class_prediction_error_chart(classifier, X_train, X_test, y_train, y_
         chart = File.as_image(fig)
         plt.close(fig)
     except Exception as e:
-        print("Did not log Class Prediction Error chart. Error {}".format(e))
+        warn(f"Did not log Class Prediction Error chart. Error {e}")
 
     return chart
 
@@ -1088,7 +1126,7 @@ def create_kelbow_chart(model, X, **kwargs):
         chart = File.as_image(fig)
         plt.close(fig)
     except Exception as e:
-        print("Did not log KMeans elbow chart. Error {}".format(e))
+        warn(f"Did not log KMeans elbow chart. Error {e}")
 
     return chart
 
@@ -1140,6 +1178,6 @@ def create_silhouette_chart(model, X, **kwargs):
             charts.append(File.as_image(fig))
             plt.close(fig)
         except Exception as e:
-            print("Did not log Silhouette Coefficients chart. Error {}".format(e))
+            warn(f"Did not log Silhouette Coefficients chart. Error {e}")
 
     return FileSeries(charts)
