@@ -1,7 +1,7 @@
 ## neptune-sklearn 2.1.4
 
 ### Fixes
-- `create_feature_importance_chart()` now does not update the original coefficients of the regressor ([#29](https://github.com/neptune-ai/neptune-sklearn/pull/29))
+- `create_feature_importance_chart()` now does not update the original coefficients of the regressor ([#30](https://github.com/neptune-ai/neptune-sklearn/pull/30)
 
 ## neptune-sklearn 2.1.3
 
