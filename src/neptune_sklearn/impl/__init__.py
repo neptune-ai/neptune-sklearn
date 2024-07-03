@@ -86,6 +86,7 @@ except ImportError:
     )
     from neptune.new.utils import stringify_unsupported
 
+from copy import deepcopy
 from warnings import warn
 
 
@@ -628,7 +629,7 @@ def create_feature_importance_chart(regressor, X_train, y_train):
 
     try:
         fig, ax = plt.subplots()
-        visualizer = FeatureImportances(regressor, is_fitted=True, ax=ax)
+        visualizer = FeatureImportances(deepcopy(regressor), is_fitted=True, ax=ax)
         visualizer.fit(X_train, y_train)
         visualizer.finalize()
 
