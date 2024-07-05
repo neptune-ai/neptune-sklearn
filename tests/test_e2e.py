@@ -8,11 +8,13 @@ except ImportError:
 
 import matplotlib as mpl
 import pytest
+from numpy import array_equal
 from sklearn.cluster import KMeans
 from sklearn.dummy import (
     DummyClassifier,
     DummyRegressor,
 )
+from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import GridSearchCV
 
 import neptune_sklearn as npt_utils
@@ -35,12 +37,16 @@ def test_classifier_summary(iris):
 
 def test_regressor_summary(diabetes):
     with init_run() as run:
-        model = DummyRegressor()
+        model = LinearRegression()
         model.fit(diabetes.x_train, diabetes.y_train)
+
+        original_coef = model.coef_
 
         run["summary"] = npt_utils.create_regressor_summary(
             model, diabetes.x_train, diabetes.x_test, diabetes.y_train, diabetes.y_test
         )
+
+        assert array_equal(model.coef_, original_coef), "Original model coefficients modified."
 
         run.wait()
         validate_run(run, log_charts=True)
@@ -48,7 +54,6 @@ def test_regressor_summary(diabetes):
 
 def test_kmeans_summary(iris):
     with init_run() as run:
-
         model = KMeans()
         model.fit(iris.x)
 
@@ -77,7 +82,11 @@ def test_unsupported_object(diabetes):
         )
 
         run["regressor_summary"] = npt_utils.create_regressor_summary(
-            grid_cv, diabetes.x_train, diabetes.x_test, diabetes.y_train, diabetes.y_test
+            grid_cv,
+            diabetes.x_train,
+            diabetes.x_test,
+            diabetes.y_train,
+            diabetes.y_test,
         )
 
         run.wait()
